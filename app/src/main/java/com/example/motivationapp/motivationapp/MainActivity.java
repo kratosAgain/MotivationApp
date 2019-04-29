@@ -36,9 +36,9 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_PIC_REQUEST = 1337;
-    public static final String EXTRA_MESSAGE = "com.example.clarifaialarm.MESSAGE";
+
     static final int REQUEST_TAKE_PHOTO = 1;
-    private String CLARIFY_KEY = "19c0718c6f82456885467e35c8b72d9f";
+
 
     private Button buttonNutrition, searchImageButton, googleSearchButton;
     private EditText searchQuery;
@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initialize() {
         this.buttonNutrition = findViewById(R.id.buttonnutrition);
-        this.searchImageButton = findViewById(R.id.searchImageButton);
+//        this.searchImageButton = findViewById(R.id.searchImageButton);
         this.googleSearchButton = findViewById(R.id.googleSearchButton);
         this.searchQuery = findViewById(R.id.query);
         this.imageview2 =  findViewById(R.id.imageView2);
-        object = getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE);
+
 
 
         this.buttonNutrition.setOnClickListener(new View.OnClickListener() {
@@ -171,9 +171,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // If we've taken a photo, send it off to Clarifai to check
-        if (photoPath != null) {
-            new ClarifaiTask().execute(new File(photoPath));
-        }
+//        if (photoPath != null) {
+//            new ClarifaiTask().execute(new File(photoPath));
+//        }
     }
 
 //    /**
@@ -353,41 +353,41 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-    private class ClarifaiTask extends AsyncTask<File, Integer, Boolean> {
-
-        protected Boolean doInBackground(File... images) {
-            //info.setText("Processing...");
-            // Connect to Clarifai using your API token
-            ClarifaiClient client = new ClarifaiBuilder(CLARIFY_KEY).buildSync();
-            List<ClarifaiOutput<Concept>> predictionResults;
-            // For each photo we pass, send it off to Clarifai
-            for (File image : images) {
-                predictionResults = client.getDefaultModels().generalModel().predict()
-                        //.withInputs(ClarifaiInput.forImage()).executeSync().get();
-                        .withInputs(ClarifaiInput.forImage(image)).executeSync().get();
-
-                // Check if Clarifai thinks the photo contains the object we are looking for
-                for (ClarifaiOutput<Concept> result : predictionResults)
-                    for (Concept datum : result.data())
-                        Log.i("RESULT", datum.toString());
-            }
-            return false;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            // Delete photo
-            (new File(photoPath)).delete();
-            photoPath = null;
-
-            // If image contained object, close the AlarmActivity
-            if (result) {
-//                info.setText("Success!");
-                Log.i("Success","sucess");
-                finish();
-            } else Log.i("Again","Try Again");
-        }
-    }
-
+//    private class ClarifaiTask extends AsyncTask<File, Integer, Boolean> {
+//
+//        protected Boolean doInBackground(File... images) {
+//            //info.setText("Processing...");
+//            // Connect to Clarifai using your API token
+//            ClarifaiClient client = new ClarifaiBuilder(CLARIFY_KEY).buildSync();
+//            List<ClarifaiOutput<Concept>> predictionResults;
+//            // For each photo we pass, send it off to Clarifai
+//            for (File image : images) {
+//                predictionResults = client.getDefaultModels().generalModel().predict()
+//                        //.withInputs(ClarifaiInput.forImage()).executeSync().get();
+//                        .withInputs(ClarifaiInput.forImage(image)).executeSync().get();
+//
+//                // Check if Clarifai thinks the photo contains the object we are looking for
+//                for (ClarifaiOutput<Concept> result : predictionResults)
+//                    for (Concept datum : result.data())
+//                        Log.i("RESULT", datum.toString());
+//            }
+//            return false;
+//        }
+//
+//        protected void onPostExecute(Boolean result) {
+//            // Delete photo
+//            (new File(photoPath)).delete();
+//            photoPath = null;
+//
+//            // If image contained object, close the AlarmActivity
+//            if (result) {
+////                info.setText("Success!");
+//                Log.i("Success","sucess");
+//                finish();
+//            } else Log.i("Again","Try Again");
+//        }
+//    }
+//
 
 
 

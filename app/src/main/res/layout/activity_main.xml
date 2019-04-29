@@ -31,13 +31,13 @@
 
 
 
-        <Button
-        android:id="@+id/searchImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SearchImage"
-        tools:layout_editor_absoluteX="209dp"
-        tools:layout_editor_absoluteY="0dp" />
+        <!--<Button-->
+        <!--android:id="@+id/searchImageButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="SearchImage"-->
+        <!--tools:layout_editor_absoluteX="209dp"-->
+        <!--tools:layout_editor_absoluteY="0dp" />-->
 
         <EditText
             android:id="@+id/query"

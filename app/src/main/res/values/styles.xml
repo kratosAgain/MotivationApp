@@ -16,5 +16,11 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ActionBarThemeOverlay">
+        <item name="android:textColorPrimary">@color/prim_color</item>
+        <item name="colorControlNormal">@color/normal_color</item>
+        <item name="colorControlHighlight">@color/high_color</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+    </style>
 
 </resources>

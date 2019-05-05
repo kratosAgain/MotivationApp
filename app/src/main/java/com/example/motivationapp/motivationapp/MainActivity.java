@@ -23,13 +23,19 @@ import com.google.api.services.customsearch.model.Result;
 
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
+import clarifai2.api.request.model.PredictRequest;
 import clarifai2.dto.input.ClarifaiInput;
+import clarifai2.dto.model.Model;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -38,22 +44,30 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAMERA_PIC_REQUEST = 1337;
 
     static final int REQUEST_TAKE_PHOTO = 1;
+    private final String CLARIFY_KEY = "19c0718c6f82456885467e35c8b72d9f";
 
-
-    private Button buttonNutrition, searchImageButton, googleSearchButton;
+    private Button buttonNutrition, searchImageButton, googleSearchButton, clarifyit;
     private EditText searchQuery;
+//    private TextView textview;
     private GetNutritionRequest nutritionRequest;
-    private ImageView imageview2 ;
+    private ImageView imageview2, imageview1 ;
     private String photoPath = null;
     private String object;
+    private String pictureFilePath;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initialize();
+
     }
 
     /**
@@ -61,10 +75,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initialize() {
         this.buttonNutrition = findViewById(R.id.buttonnutrition);
-//        this.searchImageButton = findViewById(R.id.searchImageButton);
+        this.searchImageButton = findViewById(R.id.searchImageButton);
+        this.clarifyit = findViewById(R.id.clarifyit);
         this.googleSearchButton = findViewById(R.id.googleSearchButton);
         this.searchQuery = findViewById(R.id.query);
         this.imageview2 =  findViewById(R.id.imageView2);
+        this.imageview1 =  findViewById(R.id.imageView1);
+//        this.textview = findViewById(R.id.textView);
+
 
 
 
@@ -89,19 +107,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//        this.searchImageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                /**
-//                 * this code opens the camera and takes image
-//                 */
-////                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-////                startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
-//                takePicture(v);
-////                ClarifyTextToImage img = new ClarifyTextToImage();
-////                img.run();
-//            }
-//        });
+        this.searchImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * this code opens the camera and takes image
+                 */
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+                takePicture(v);
+//                ClarifyTextToImage img = new ClarifyTextToImage();
+//                img.run();
+            }
+        });
+
+        this.clarifyit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                clarifyTask();
+            }
+        });
 
 
         this.googleSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -112,12 +138,40 @@ public class MainActivity extends AppCompatActivity {
                 task.execute(searchQuery.getText().toString());
             }
         });
+
+        this.imageview1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                doNothing();
+                //do nothing
+            }
+        });
+
+
+
+
+
         this.takePermission();
     }
 
+    private void doNothing(){
+        Toast.makeText(this,
+                "Photo clicked",
+                Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            File imgFile = new  File(pictureFilePath);
+            if(imgFile.exists())            {
+                imageview1.setImageURI(Uri.fromFile(imgFile));
+            }
+        }
+    }
 
-//    public void takePicture(View view) {
-//        // Create intent to open camera app
+
+    public void takePicture(View view) {
+        // Create intent to open camera app
 //        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        // Proceed only if there is a camera app
 //        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -134,7 +188,40 @@ public class MainActivity extends AppCompatActivity {
 ////            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 //            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
 //        //}
-//    }
+
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(cameraIntent, 1);
+
+            File pictureFile = null;
+            try {
+                pictureFile = getPictureFile();
+            } catch (IOException ex) {
+                Toast.makeText(this,
+                        "Photo file can't be created, please try again",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (pictureFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        getApplicationContext().getApplicationContext().getPackageName() + ".provider",
+                        pictureFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(cameraIntent, 1);
+            }
+        }
+    }
+
+
+    private File getPictureFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String pictureFile = "foodimage_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(pictureFile,  ".jpg", storageDir);
+        pictureFilePath = image.getAbsolutePath();
+        return image;
+    }
+
 
     /**
      * Function for taking permission to write to file
@@ -166,31 +253,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
+
+    public void clarifyTask() {
+
+
 
         // If we've taken a photo, send it off to Clarifai to check
-//        if (photoPath != null) {
-//            new ClarifaiTask().execute(new File(photoPath));
-//        }
+        if (pictureFilePath != null && pictureFilePath.length()!=0) {
+
+            Intent myIntent = new Intent(MainActivity.this, ClarifaiActivity.class);
+            myIntent.putExtra("pictureFilePath", pictureFilePath);
+            MainActivity.this.startActivity(myIntent);
+        }
     }
 
-//    /**
-//     * this function puts the imaga taken from camera to imageview
-//     * @param requestCode
-//     * @param resultCode
-//     * @param data
-//     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-////        if (requestCode == CAMERA_PIC_REQUEST) {
-////            Bitmap image = (Bitmap) data.getExtras().get("data");
-////            ImageView imageview = (ImageView) findViewById(R.id.imageView1); //sets imageview as the bitmap
-////            imageview.setImageBitmap(image);
-////        }
-//
-//    }
 
     /**
      * Put a drawable in an imageview
@@ -352,43 +428,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-
-//    private class ClarifaiTask extends AsyncTask<File, Integer, Boolean> {
-//
-//        protected Boolean doInBackground(File... images) {
-//            //info.setText("Processing...");
-//            // Connect to Clarifai using your API token
-//            ClarifaiClient client = new ClarifaiBuilder(CLARIFY_KEY).buildSync();
-//            List<ClarifaiOutput<Concept>> predictionResults;
-//            // For each photo we pass, send it off to Clarifai
-//            for (File image : images) {
-//                predictionResults = client.getDefaultModels().generalModel().predict()
-//                        //.withInputs(ClarifaiInput.forImage()).executeSync().get();
-//                        .withInputs(ClarifaiInput.forImage(image)).executeSync().get();
-//
-//                // Check if Clarifai thinks the photo contains the object we are looking for
-//                for (ClarifaiOutput<Concept> result : predictionResults)
-//                    for (Concept datum : result.data())
-//                        Log.i("RESULT", datum.toString());
-//            }
-//            return false;
-//        }
-//
-//        protected void onPostExecute(Boolean result) {
-//            // Delete photo
-//            (new File(photoPath)).delete();
-//            photoPath = null;
-//
-//            // If image contained object, close the AlarmActivity
-//            if (result) {
-////                info.setText("Success!");
-//                Log.i("Success","sucess");
-//                finish();
-//            } else Log.i("Again","Try Again");
-//        }
-//    }
-//
-
 
 
 }

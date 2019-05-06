@@ -12,9 +12,10 @@ import java.net.URL;
 public class GetNutritionRequest {
     private String nutritionxURL = "https://api.nutritionix.com/v1_1/search";
 
-    public void MyGETRequest(String food) throws Exception {
+    public JSONObject MyGETRequest(String food) throws Exception {
         URL urlForGetRequest = new URL(this.nutritionxURL);
         String readLine = null;
+        JSONObject fields=null;
         HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
         conection.setRequestMethod("GET");
         conection.setDoOutput(true);
@@ -44,7 +45,7 @@ public class GetNutritionRequest {
             /**
              * API results is in the fields
              */
-            JSONObject fields = hits.getJSONObject("fields");
+            fields = hits.getJSONObject("fields");
 
             Log.i("Motivation","Fields :"+fields.toString());
 
@@ -52,6 +53,8 @@ public class GetNutritionRequest {
 
             Log.i("Motivation","GET NOT WORKED");
         }
+
+        return fields;
 
     }
 

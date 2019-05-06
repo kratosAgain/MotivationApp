@@ -1,7 +1,6 @@
 package com.example.android.motivatinalapp;
 
-import android.app.SearchManager;
-import android.content.Context;
+
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,57 +14,27 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
-import android.R.layout;
 import android.widget.Toast;
-import android.widget.Toolbar;
-import android.support.v7.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.*;
+
+
 
 import com.google.api.services.customsearch.model.Result;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
 
-import clarifai2.api.ClarifaiBuilder;
-import clarifai2.api.ClarifaiClient;
-import clarifai2.dto.input.ClarifaiInput;
-import clarifai2.dto.model.output.ClarifaiOutput;
-import clarifai2.dto.prediction.Concept;
+import org.json.JSONObject;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -74,8 +43,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-
-
 import static android.R.layout.simple_list_item_1;
 
 public class Frag2 extends Fragment  {
@@ -83,7 +50,7 @@ public class Frag2 extends Fragment  {
 
     static final int REQUEST_TAKE_PHOTO = 1;
     private Button buttonNutrition, searchImageButton, googleSearchButton;
-    private EditText searchQuery;
+    private static EditText searchQuery;
     private GetNutritionRequest nutritionRequest;
     private ImageView imageview2 ;
     private String photoPath = null;
@@ -91,6 +58,8 @@ public class Frag2 extends Fragment  {
 //    private SearchView searchView = null;
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
+    public static UserData userDataMain;
+    DatabaseHelper db = null;
     String[] list;
 
     @Nullable
@@ -98,9 +67,12 @@ public class Frag2 extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_layout, container, false);
         buttonNutrition =(Button)view.findViewById(R.id.buttonnutrition);
-        googleSearchButton = (Button)view.findViewById(R.id.googleSearchButton);
+//        googleSearchButton = (Button)view.findViewById(R.id.googleSearchButton);
         searchQuery = (EditText)view.findViewById(R.id.query);
         imageview2 =  (ImageView)view.findViewById(R.id.imageView2);
+        Log.i("CURRENT_USERNAME",currentUser.currentUserName);
+
+        userDataMain = new UserData();
 
         buttonNutrition.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,18 +86,30 @@ public class Frag2 extends Fragment  {
                     Log.i("Motivation", "Error in get request initialization");
                     e.printStackTrace();
                 }
+                try {
+                    GoogleImageSearchTask task = new GoogleImageSearchTask();
+                    task.execute(searchQuery.getText().toString());
+                }catch(Exception e){
+                    Log.i("Motivation", "Error in google request");
+                    e.printStackTrace();
+                }
+
             }
         });
-        googleSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleImageSearchTask task = new GoogleImageSearchTask();
 
-                task.execute(searchQuery.getText().toString());
-            }
+        db =new DatabaseHelper(getActivity());
 
 
-        });
+//        googleSearchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                GoogleImageSearchTask task = new GoogleImageSearchTask();
+//
+//                task.execute(searchQuery.getText().toString());
+//            }
+//
+//
+//        });
         takePermission();
 
 
@@ -191,7 +175,16 @@ public class Frag2 extends Fragment  {
         private GetNutritionRequest nutritionRequestInner;
         public void fetchNutritionApiData(GetNutritionRequest nutritionRequest) {
             try {
-                nutritionRequest.MyGETRequest("Milk, 1% Lowfat Aldi");
+                JSONObject obj = nutritionRequest.MyGETRequest(searchQuery.getText().toString());
+                userDataMain.setCalories(Double.parseDouble(obj.getString("nf_calories")));
+                userDataMain.setFat(Double.parseDouble(obj.getString("nf_total_fat")));
+                userDataMain.setIron(Double.parseDouble(obj.getString("nf_iron_dv")));
+                userDataMain.setCarbs(Double.parseDouble(obj.getString("nf_total_carbohydrate")));
+                userDataMain.setProtein(Double.parseDouble(obj.getString("nf_protein")));
+                userDataMain.setSodium(Double.parseDouble(obj.getString("nf_sodium")));
+                userDataMain.setFoodName(obj.getString("item_name"));
+                userDataMain.setUserName(currentUser.currentUserName);
+                userDataMain.setBmi(currentUser.currenUserBMI);
             } catch (Exception e) {
                 Log.i("Motivation", "Error in get request send");
                 e.printStackTrace();
@@ -230,37 +223,54 @@ public class Frag2 extends Fragment  {
                 Log.i("GoogleSearch", r.getTitle());
                 count++;
                 saveImage(storeLink, query);
+
+                try{
+                    db.insertUserData(userDataMain);
+                    db.close();
+                }catch(Exception e){
+                    Log.i("Motivation", "Erorr in userdata base writing");
+                    e.printStackTrace();
+                }
+
                 if (count == 1)
                     break;
             }
         }
+
             public void saveImage(String urlstr, String query) throws Exception {
                 int c = 0;
                 URL url = new URL(urlstr);
                 InputStream input = url.openStream();
-                File storagePath = Environment.getExternalStorageDirectory();
-                OutputStream output = new FileOutputStream(new File(storagePath,query+".png"));
-                byte[] buffer = new byte[512];
-                int bytesRead = 0;
-                while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
-                    output.write(buffer, 0, bytesRead);
-                }
-                output.close();
+                Bitmap bimage = null;
+                bimage = BitmapFactory.decodeStream(input);
+//                File storagePath = Environment.getExternalStorageDirectory();
+//                OutputStream output = new FileOutputStream(new File(storagePath,query+".png"));
+//                byte[] buffer = new byte[512];
+//                int bytesRead = 0;
+//                while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
+//                    output.write(buffer, 0, bytesRead);
+//                }
+//                output.close();
                 input.close();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bimage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte imageInByte[] = stream.toByteArray();
+                userDataMain.setImage(imageInByte);
+                stream.close();
 
-                Bitmap x;
-
-                /**
-                 * create drawable from Google URL, we can also open the file we save above, its just another way
-                 * of doing it.
-                 */
-
-                HttpURLConnection connection = (HttpURLConnection) new URL(urlstr).openConnection();
-                connection.connect();
-                InputStream in = connection.getInputStream();
-
-                x = BitmapFactory.decodeStream(in);
-                drawable = new BitmapDrawable(getContext().getResources(),x);
+//                Bitmap x;
+//
+//                /**
+//                 * create drawable from Google URL, we can also open the file we save above, its just another way
+//                 * of doing it.
+//                 */
+//
+//                HttpURLConnection connection = (HttpURLConnection) new URL(urlstr).openConnection();
+//                connection.connect();
+//                InputStream in = connection.getInputStream();
+//
+//                x = BitmapFactory.decodeStream(in);
+                drawable = new BitmapDrawable(getContext().getResources(),bimage);
             }
 
 
@@ -296,7 +306,6 @@ public class Frag2 extends Fragment  {
                 // this is executed on the main thread after the process is over
                 // update your UI here
                 drawImageInView(drawable);
-
             }
         }
 

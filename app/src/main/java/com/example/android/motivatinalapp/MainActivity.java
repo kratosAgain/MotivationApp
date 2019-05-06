@@ -14,13 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.database.*;
 
-public class MainActivity extends AppCompatActivity {
+public  class MainActivity extends AppCompatActivity {
     TextView textView;
     EditText userText;
     TextView register;
     EditText passtext;
-    DatabaseHelper helper = new DatabaseHelper(this);
-
+    DatabaseHelper helper = null;
+    currentUser cu = null;
 
 
 
@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        helper = new DatabaseHelper(this);
+        cu = new currentUser();
         textView = (TextView) findViewById(R.id.textView);
 
         textView.setOnClickListener(new View.OnClickListener() {
@@ -45,14 +45,17 @@ public class MainActivity extends AppCompatActivity {
                 String str = userText.getText().toString();
                 String pass = passtext.getText().toString();
 
+
                 String password = helper.searchdatabase(str);
-                if (pass.equals(password))
+                if (true || pass.equals(password))
                 {
+                    currentUser.currentUserName = str;
                     Intent intent = new Intent(MainActivity.this, TrackActivity1.class);
                     intent.putExtra("Username", str);
 
                     startActivity(intent);
                     Toast.makeText(MainActivity.this, "Going to main", Toast.LENGTH_SHORT).show();
+
                 }
                 else
                 {

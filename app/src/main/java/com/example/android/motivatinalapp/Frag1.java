@@ -54,6 +54,7 @@ public class Frag1 extends Fragment {
                     float bmi = fw/(fh*fh);
                     Log.d("log bmi", Float.toString(bmi));
                     displayBMI(bmi);
+                    currentUser.currenUserBMI = bmi;
 
                 }
 

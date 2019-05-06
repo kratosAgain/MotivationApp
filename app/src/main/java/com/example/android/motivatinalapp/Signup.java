@@ -8,13 +8,12 @@ import android.widget.Toast;
 
 
 public class Signup extends Activity{
-    DatabaseHelper db =new DatabaseHelper(this);
+    DatabaseHelper db = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_activity);
+        db =new DatabaseHelper(this);
     }
 
     public void onSignup(View v)
@@ -51,10 +50,9 @@ public class Signup extends Activity{
                 c.setPass(passstr);
                 c.setUname(usernamestr);
                 db.insertContact(c);
+                currentUser.currentUserName = usernamestr;
+                db.close();
             }
-
-
-
         }
 
     }

@@ -9,15 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.database.*;
 
 public  class MainActivity extends AppCompatActivity {
-    TextView textView;
+    Button textView;
     EditText userText;
-    TextView register;
+    Button register;
     EditText passtext;
     DatabaseHelper helper = null;
     currentUser cu = null;
@@ -32,7 +33,7 @@ public  class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         helper = new DatabaseHelper(this);
         cu = new currentUser();
-        textView = (TextView) findViewById(R.id.textView);
+        textView = (Button) findViewById(R.id.textView);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +69,7 @@ public  class MainActivity extends AppCompatActivity {
             }
         });
 
-        register = (TextView) findViewById(R.id.registerid);
+        register = (Button) findViewById(R.id.registerid);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

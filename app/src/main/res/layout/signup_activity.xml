@@ -7,9 +7,11 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="150dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textStyle="bold"
         android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:text="Lets get you sign up!"
@@ -20,7 +22,7 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="50dp"
         android:layout_weight="1"
         android:text="Enter your Name"
@@ -33,9 +35,11 @@
         android:layout_below="@+id/username"
         android:layout_alignStart="@+id/username"
         android:layout_marginStart="0dp"
+        android:layout_marginLeft="50dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:hint="Name"
+        />
 
     <TextView
         android:id="@+id/textView11"
@@ -45,7 +49,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="127dp"
-        android:text="Enter Email-Id" />
+        android:text="Enter Email-Id"
+
+        />
 
     <EditText
         android:id="@+id/emailid"
@@ -55,7 +61,8 @@
         android:layout_alignStart="@+id/username"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Email-Id" />
+        android:hint="Email-id"
+         />
 
     <TextView
         android:id="@+id/textView12"
@@ -75,7 +82,8 @@
         android:layout_alignStart="@+id/username"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="User-Name" />
+        android:hint="User-Name"
+         />
 
     <TextView
         android:id="@+id/textView13"
@@ -83,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/username"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="-3dp"
+        android:layout_marginStart="0dp"
         android:layout_marginBottom="234dp"
         android:text="Password" />
 
@@ -96,7 +104,8 @@
         android:layout_marginTop="-234dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Password" />
+        android:hint="Password"
+       />
 
     <TextView
         android:id="@+id/textView14"
@@ -114,7 +123,8 @@
         android:layout_alignStart="@+id/textView13"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Confirm Password" />
+        android:hint="Confirm Password"
+        />
 
     <Button
         android:id="@+id/button"

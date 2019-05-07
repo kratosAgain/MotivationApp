@@ -10,10 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+
         >
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:id="@+id/food_image"
             app:srcCompat="@drawable/info"
             />
@@ -44,8 +45,9 @@
                 android:layout_height="match_parent"
                 android:text="Calories"
                 android:gravity="left"
-                android:textSize="15dp"
+                android:textSize="25dp"
                 android:textStyle="italic"
+                android:layout_weight="1"
                 />
 
             <TextView
@@ -53,7 +55,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/food_calories"
                 android:gravity="right"
-                android:textSize="15dp"
+                android:layout_gravity="right"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 />
 
 
@@ -70,7 +74,8 @@
                 android:layout_height="match_parent"
                 android:text="Total Fat"
                 android:gravity="left"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 android:textStyle="italic"
                 />
 
@@ -79,7 +84,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/food_fat"
                 android:gravity="right"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 />
 
 
@@ -96,7 +102,8 @@
                 android:layout_height="match_parent"
                 android:text="Carbohydrate"
                 android:gravity="left"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 android:textStyle="italic"
                 />
 
@@ -105,7 +112,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/food_carbs"
                 android:gravity="right"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 />
 
 
@@ -122,7 +130,8 @@
                 android:layout_height="match_parent"
                 android:text="Protein"
                 android:gravity="left"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 android:textStyle="italic"
                 />
 
@@ -131,7 +140,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/food_protein"
                 android:gravity="right"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 />
 
 
@@ -147,7 +157,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Iron"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 android:gravity="left"
                 android:textStyle="italic"
                 />
@@ -157,7 +168,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/food_iron"
                 android:gravity="right"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 />
 
 
@@ -173,7 +185,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Sodium"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 android:gravity="left"
                 android:textStyle="italic"
                 />
@@ -182,7 +195,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/food_sodium"
-                android:textSize="15dp"
+                android:textSize="25dp"
+                android:layout_weight="1"
                 android:gravity="right"
                 />
 

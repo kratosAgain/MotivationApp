@@ -37,13 +37,23 @@
                 android:layout_width="116dp"
                 android:layout_height="fill_parent"
 
-                android:text="SEARCH"
+                android:text="ADD FOOD"
 
                 tools:layout_editor_absoluteX="2dp"
                 tools:layout_editor_absoluteY="0dp" />
 
 
+
+
         </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/refresh"
+            android:text="REFRESH"
+
+            />
 
         <!--<EditText-->
 
@@ -65,17 +75,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
 
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/records"
+                android:smoothScrollbar="true"
+                android:alwaysDrawnWithCache="true"
                 >
 
 
 
             </ListView>
+
+
 
             <!--<ImageView-->
                 <!--android:id="@+id/imageView1"-->

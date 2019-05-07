@@ -29,15 +29,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String FAT = "fat";
     private static final String PROTEIN = "protein";
     private static final String SODIUM = "sodium";
-    private static final String IRON = "real";
+    private static final String IRON = "iron";
     private static final String DATE = "date";
     private static final String GIMAGE = "gimage";
     private static final String BMI = "bmi";
 
-    private static final String TABLE_CREATE_CONTACTS ="create table contacts("+
+    private static final String TABLE_CREATE_CONTACTS ="create table IF NOT EXISTS contacts("+
     "uname text primary key not null, name text not null, email text not null,  pass text not null)";
 
-    private static final String TABLE_CREATE_USERDATA = "create table userdata("+
+    private static final String TABLE_CREATE_USERDATA = "create table IF NOT EXISTS userdata("+
      "uname text not null, food_name text not null, calories real not null, carbs real, fat real, protein real, sodium real, iron real, bmi real, date text, gimage blob)";
 
 
@@ -103,7 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(this.PROTEIN, u.protein);
         values.put(this.CARBS, u.carbs);
         values.put(this.GIMAGE, u.image);
-        values.put(this.DATE, "datetime('now','localtime'");
+        values.put(this.DATE, "datetime('now','localtime')");
         values.put(this.BMI, u.bmi);
         db.insert(this.TABLE_NAME_USERDATA,null, values);
         db.close();

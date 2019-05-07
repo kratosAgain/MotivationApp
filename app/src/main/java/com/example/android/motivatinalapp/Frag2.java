@@ -50,7 +50,7 @@ public class Frag2 extends Fragment  {
     private static final int CAMERA_PIC_REQUEST = 1337;
 
     static final int REQUEST_TAKE_PHOTO = 1;
-    private Button buttonNutrition, searchImageButton, googleSearchButton;
+    private Button buttonNutrition, searchImageButton, googleSearchButton, refresh;
     private static EditText searchQuery;
     private GetNutritionRequest nutritionRequest;
     private ImageView imageview2 ;
@@ -64,12 +64,14 @@ public class Frag2 extends Fragment  {
     DatabaseHelper db = null;
     String[] list;
     List<UserData> userlist;
+    CustomListAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_layout, container, false);
         buttonNutrition =(Button)view.findViewById(R.id.buttonnutrition);
+        refresh = (Button)view.findViewById(R.id.refresh);
 //        googleSearchButton = (Button)view.findViewById(R.id.googleSearchButton);
         searchQuery = (EditText)view.findViewById(R.id.query);
 //        imageview2 =  (ImageView)view.findViewById(R.id.imageView2);
@@ -98,13 +100,21 @@ public class Frag2 extends Fragment  {
                     e.printStackTrace();
                 }
 
+
+            }
+        });
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reload();
             }
         });
 
         db =new DatabaseHelper(getActivity());
         userlist = new ArrayList<>();
         userlist = db.getUserDataList(currentUser.currentUserName);
-        CustomListAdapter adapter = new CustomListAdapter(getActivity(), db, userlist);
+        adapter = new CustomListAdapter(getActivity(), db, userlist);
         this.listview.setAdapter(adapter);
         this.listview.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -130,9 +140,30 @@ public class Frag2 extends Fragment  {
 //        });
         takePermission();
 
+        updateData();
 
         return view;
 
+    }
+
+    private void reload(){
+        Intent intent = getActivity().getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        getActivity().finish();
+        startActivity(intent);
+    }
+
+    private void updateData() {
+        userlist = db.getUserDataList(currentUser.currentUserName);
+        adapter.setUserList(userlist);
+
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {
@@ -244,7 +275,7 @@ public class Frag2 extends Fragment  {
 
                 try{
                     db.insertUserData(userDataMain);
-                    db.close();
+
                 }catch(Exception e){
                     Log.i("Motivation", "Erorr in userdata base writing");
                     e.printStackTrace();

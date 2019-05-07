@@ -28,6 +28,10 @@ public class CustomListAdapter extends ArrayAdapter {
         this.context=context;
     }
 
+    public void setUserList(List<UserData> userList){
+        this.userList = userList;
+    }
+
     public View getView(int position, View view, ViewGroup parent) {
         View rowView = null;
         try {
@@ -44,10 +48,10 @@ public class CustomListAdapter extends ArrayAdapter {
 
             //this code sets the values of the objects to values from the arrays
             foodField.setText(userList.get(position).foodName);
-            carbsField.setText("" + userList.get(position).carbs);
-            calorieField.setText("" + userList.get(position).calories);
-            fatField.setText("" + userList.get(position).fat);
-            proteinField.setText("" + userList.get(position).protein);
+            carbsField.setText("Carbohydrates" + userList.get(position).carbs);
+            calorieField.setText("Calories:" + userList.get(position).calories);
+            fatField.setText("Fat:" + userList.get(position).fat);
+            proteinField.setText("Protein:" + userList.get(position).protein);
 
 
             ByteArrayInputStream imageStream = new ByteArrayInputStream(userList.get(position).image);

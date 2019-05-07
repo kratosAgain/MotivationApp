@@ -7,9 +7,9 @@
 
     <ImageView
         android:id="@+id/food_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_weight="1.5"
         app:srcCompat="@drawable/info" />
 
     <LinearLayout
@@ -22,36 +22,48 @@
 
         <TextView
             android:id="@+id/food_name"
+            android:maxLength="23"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="FOOD NAME"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="right"
+            android:gravity="right"
+            />
 
         <TextView
             android:id="@+id/food_calories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:textSize="15sp"
+            android:layout_gravity="right"
+            android:gravity="right"/>
         <TextView
             android:id="@+id/food_fat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/food_carbs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textSize="15sp" />
         <TextView
             android:id="@+id/food_protein"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textSize="15sp" />
     </LinearLayout>
 </LinearLayout>

@@ -54,44 +54,54 @@
 
             <!--/>-->
 
-        <Button
-            android:id="@+id/googleSearchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Google Search"
-            tools:layout_editor_absoluteX="209dp"
-            tools:layout_editor_absoluteY="0dp" />
+        <!--<Button-->
+            <!--android:id="@+id/googleSearchButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Google Search"-->
+            <!--tools:layout_editor_absoluteX="209dp"-->
+            <!--tools:layout_editor_absoluteY="0dp" />-->
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="230dp"
-                android:layout_height="333dp"
-                tools:layout_editor_absoluteX="-12dp"
-                tools:layout_editor_absoluteY="134dp"
-                tools:srcCompat="@tools:sample/avatars" />
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/records"
+                >
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="230dp"
-                android:layout_height="333dp"
-                tools:layout_editor_absoluteX="-12dp"
-                tools:layout_editor_absoluteY="134dp"
-                tools:srcCompat="@tools:sample/avatars" />
+
+
+            </ListView>
+
+            <!--<ImageView-->
+                <!--android:id="@+id/imageView1"-->
+                <!--android:layout_width="230dp"-->
+                <!--android:layout_height="333dp"-->
+                <!--tools:layout_editor_absoluteX="-12dp"-->
+                <!--tools:layout_editor_absoluteY="134dp"-->
+                <!--tools:srcCompat="@tools:sample/avatars" />-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/imageView2"-->
+                <!--android:layout_width="230dp"-->
+                <!--android:layout_height="333dp"-->
+                <!--tools:layout_editor_absoluteX="-12dp"-->
+                <!--tools:layout_editor_absoluteY="134dp"-->
+                <!--tools:srcCompat="@tools:sample/avatars" />-->
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/editText6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+        <!--<EditText-->
+            <!--android:id="@+id/editText6"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ems="10"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:text="Name" />-->
 
     </LinearLayout>
 

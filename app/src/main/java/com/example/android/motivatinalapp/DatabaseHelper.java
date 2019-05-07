@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     SQLiteDatabase db;
     private static final int DATABASE_VERSION = 1;
@@ -149,6 +152,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        }
         return password;
 
+    }
+
+    public List<UserData> getUserDataList(String username){
+        Cursor c = this.searchUserDatabase(username);
+        List<UserData> data = new ArrayList<>();
+
+        try{
+            if(c.moveToFirst()){
+                do{
+
+                    /**
+                     * private static final String TABLE_CREATE_USERDATA = "create table userdata("+
+                     *      "uname text not null, food_name text not null, calories real not null, carbs real,
+                     *      fat real, protein real, sodium real, iron real, bmi real, date text, gimage blob)";
+                     */
+                    UserData u = new UserData();
+                    u.setUserName(c.getString(0));
+                    u.setFoodName(c.getString(1));
+                    u.setCalories(Double.parseDouble(c.getString(2)));
+                    u.setCarbs(Double.parseDouble(c.getString(3)));
+                    u.setFat(Double.parseDouble(c.getString(4)));
+                    u.setProtein(Double.parseDouble(c.getString(5)));
+                    u.setSodium(Double.parseDouble(c.getString(6)));
+                    u.setIron(Double.parseDouble(c.getString(7)));
+                    u.setBmi(Double.parseDouble(c.getString(8)));
+                    u.setDate(c.getString(9));
+                    u.setImage(c.getBlob(10));
+                    data.add(u);
+                }while(c.moveToNext());
+            }
+        }catch(Exception e){
+            Log.e("CURSOR_ERROR","error in making list from cursor");
+            e.printStackTrace();
+        }
+        return data;
     }
 
     public Cursor searchUserDatabase(String username){

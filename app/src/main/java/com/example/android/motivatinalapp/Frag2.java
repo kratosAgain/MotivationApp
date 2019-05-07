@@ -1,6 +1,7 @@
 package com.example.android.motivatinalapp;
 
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,11 +19,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 
 
@@ -35,12 +39,9 @@ import org.json.JSONObject;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.R.layout.simple_list_item_1;
@@ -53,6 +54,7 @@ public class Frag2 extends Fragment  {
     private static EditText searchQuery;
     private GetNutritionRequest nutritionRequest;
     private ImageView imageview2 ;
+    ListView listview = null;
     private String photoPath = null;
     private String object;
 //    private SearchView searchView = null;
@@ -61,6 +63,7 @@ public class Frag2 extends Fragment  {
     public static UserData userDataMain;
     DatabaseHelper db = null;
     String[] list;
+    List<UserData> userlist;
 
     @Nullable
     @Override
@@ -69,7 +72,8 @@ public class Frag2 extends Fragment  {
         buttonNutrition =(Button)view.findViewById(R.id.buttonnutrition);
 //        googleSearchButton = (Button)view.findViewById(R.id.googleSearchButton);
         searchQuery = (EditText)view.findViewById(R.id.query);
-        imageview2 =  (ImageView)view.findViewById(R.id.imageView2);
+//        imageview2 =  (ImageView)view.findViewById(R.id.imageView2);
+        listview = view.findViewById(R.id.records);
         Log.i("CURRENT_USERNAME",currentUser.currentUserName);
 
         userDataMain = new UserData();
@@ -98,6 +102,20 @@ public class Frag2 extends Fragment  {
         });
 
         db =new DatabaseHelper(getActivity());
+        userlist = new ArrayList<>();
+        userlist = db.getUserDataList(currentUser.currentUserName);
+        CustomListAdapter adapter = new CustomListAdapter(getActivity(), db, userlist);
+        this.listview.setAdapter(adapter);
+        this.listview.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), FootDetails.class);
+                UserData u = userlist.get(position);
+                intent.putExtra("userdata", u);
+                getActivity().startActivity(intent);
+
+            }
+        });
 
 
 //        googleSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -305,7 +323,7 @@ public class Frag2 extends Fragment  {
             protected void onPostExecute(String result) {
                 // this is executed on the main thread after the process is over
                 // update your UI here
-                drawImageInView(drawable);
+//                drawImageInView(drawable);
             }
         }
 

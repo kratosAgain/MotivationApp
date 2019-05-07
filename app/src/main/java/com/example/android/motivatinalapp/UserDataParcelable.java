@@ -1,71 +1,16 @@
-//package com.example.android.motivatinalapp;
-//
-//public class UserData {
-//
-//    public String userName, foodName, date;
-//    public double calories, fat, carbs, iron, sodium , protein, bmi;
-//    public byte[] image;
-//
-//
-//    public void setUserName(String userName){
-//        this.userName = userName;
-//    }
-//
-//    public void setFoodName(String foodName){
-//        this.foodName = foodName;
-//    }
-//    public void setFat(double fat){
-//        this.fat = fat;
-//    }
-//    public void setCarbs(double carbs){
-//        this.carbs = carbs;
-//    }
-//    public void setSodium(double sodium){
-//        this.sodium = sodium;
-//    }
-//    public void setIron(double iron){
-//        this.iron = iron;
-//    }
-//    public void setProtein(double protien){
-//        this.protein = protien;
-//    }
-//    public void setCalories(double calories){
-//        this.calories = calories;
-//    }
-//    public void setBmi(double bmi){
-//        this.bmi = bmi;
-//    }
-//
-//    public void setImage(byte[] image){
-//        this.image = image;
-//    }
-//    public void setDate(String date){
-//        this.date = date;
-//    }
-//
-//
-//}
-
-
-
 package com.example.android.motivatinalapp;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class UserData implements Parcelable {
+public class UserDataParcelable implements Parcelable {
 
 
     public String userName, foodName, date;
     public double calories, fat, carbs, iron, sodium , protein, bmi;
     public byte[] image;
 
-
-    public UserData(){
-
-    }
-
-    public UserData (
+    public UserDataParcelable (
 
             String userName,
             String foodName,
@@ -90,7 +35,7 @@ public class UserData implements Parcelable {
     }
 
 
-    public UserData(Parcel parcel){
+    public UserDataParcelable(Parcel parcel){
         //read and set saved values from parcel
         this.userName = parcel.readString();
         this.foodName = parcel.readString();
@@ -170,19 +115,18 @@ public class UserData implements Parcelable {
     }
 
 
-    public static final Parcelable.Creator<UserData> CREATOR = new Parcelable.Creator<UserData>(){
+    public static final Parcelable.Creator<UserDataParcelable> CREATOR = new Parcelable.Creator<UserDataParcelable>(){
 
         @Override
-        public UserData createFromParcel(Parcel parcel) {
-            return new UserData(parcel);
+        public UserDataParcelable createFromParcel(Parcel parcel) {
+            return new UserDataParcelable(parcel);
         }
 
         @Override
-        public UserData[] newArray(int size) {
-            return new UserData[0];
+        public UserDataParcelable[] newArray(int size) {
+            return new UserDataParcelable[0];
         }
     };
 
 
 }
-

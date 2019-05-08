@@ -1,20 +1,24 @@
 package com.example.android.motivatinalapp;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,18 +43,32 @@ import org.json.JSONObject;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import clarifai2.api.ClarifaiBuilder;
+import clarifai2.api.ClarifaiClient;
+import clarifai2.api.ClarifaiResponse;
+import clarifai2.api.request.model.PredictRequest;
+import clarifai2.dto.input.ClarifaiInput;
+import clarifai2.dto.model.Model;
+import clarifai2.dto.model.output.ClarifaiOutput;
+import clarifai2.dto.prediction.Concept;
+
 import static android.R.layout.simple_list_item_1;
+import static android.app.Activity.RESULT_OK;
 
 public class Frag2 extends Fragment  {
     private static final int CAMERA_PIC_REQUEST = 1337;
+    private static final String CLARIFY_KEY = "19c0718c6f82456885467e35c8b72d9f";
 
     static final int REQUEST_TAKE_PHOTO = 1;
-    private Button buttonNutrition, searchImageButton, googleSearchButton, refresh;
+    private Button buttonNutrition, searchImageButton, googleSearchButton, refresh, takeapic;
     private static EditText searchQuery;
     private GetNutritionRequest nutritionRequest;
     private ImageView imageview2 ;
@@ -65,17 +83,21 @@ public class Frag2 extends Fragment  {
     String[] list;
     List<UserData> userlist;
     CustomListAdapter adapter;
+    private String pictureFilePath;
+    private String clarifyString="";
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_layout, container, false);
-        buttonNutrition =(Button)view.findViewById(R.id.buttonnutrition);
-        refresh = (Button)view.findViewById(R.id.refresh);
+        buttonNutrition =view.findViewById(R.id.buttonnutrition);
+        refresh = view.findViewById(R.id.refresh);
 //        googleSearchButton = (Button)view.findViewById(R.id.googleSearchButton);
-        searchQuery = (EditText)view.findViewById(R.id.query);
+        searchQuery = view.findViewById(R.id.query);
 //        imageview2 =  (ImageView)view.findViewById(R.id.imageView2);
         listview = view.findViewById(R.id.records);
+        takeapic = view.findViewById(R.id.takeapic);
         Log.i("CURRENT_USERNAME",currentUser.currentUserName);
 
         userDataMain = new UserData();
@@ -127,24 +149,77 @@ public class Frag2 extends Fragment  {
             }
         });
 
+        this.takeapic.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
 
-//        googleSearchButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GoogleImageSearchTask task = new GoogleImageSearchTask();
-//
-//                task.execute(searchQuery.getText().toString());
-//            }
-//
-//
-//        });
+                takePicture(v);
+            }
+        });
+
+
+
         takePermission();
 
-        updateData();
+//        updateData();
 
         return view;
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1888 && resultCode == RESULT_OK) {
+            if (pictureFilePath != null && pictureFilePath.length()!=0) {
+
+                try {
+                    ClarifaiTask ca = new ClarifaiTask();
+                    ca.execute();
+                }catch(Exception e){
+                    Log.i("CLARIFY", "Error in clarify , in activity result");
+                    e.printStackTrace();
+                }
+
+            }
+            Log.i("CLARIFY","clairifystring "+clarifyString);
+        }
+    }
+
+
+    public void takePicture(View view) {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(cameraIntent, 1);
+
+            File pictureFile = null;
+            try {
+                pictureFile = getPictureFile();
+            } catch (IOException ex) {
+                Toast.makeText(getActivity(),
+                        "Photo file can't be created, please try again",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (pictureFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                        getActivity().getApplicationContext().getApplicationContext().getPackageName() + ".provider",
+                        pictureFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(cameraIntent, 1888);
+            }
+        }
+    }
+
+    private File getPictureFile() throws IOException {
+//        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String pictureFile = "foodimage";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(pictureFile,  ".jpg", storageDir);
+        pictureFilePath = image.getAbsolutePath();
+        return image;
+    }
+
+
 
     private void reload(){
         Intent intent = getActivity().getIntent();
@@ -153,32 +228,19 @@ public class Frag2 extends Fragment  {
         startActivity(intent);
     }
 
-    private void updateData() {
-        userlist = db.getUserDataList(currentUser.currentUserName);
-        adapter.setUserList(userlist);
-
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
-    }
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
+//    private void updateData() {
+//        userlist = db.getUserDataList(currentUser.currentUserName);
+//        adapter.setUserList(userlist);
 //
-//        initialize();
 //
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
 //    }
-//
-//    public void initialize()
-//    {
-//
-//
-//
-//    }
+
 
     private void takePermission()
     {
@@ -188,6 +250,13 @@ public class Frag2 extends Fragment  {
             {
                 ActivityCompat.requestPermissions(this.getActivity(),
                         new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
+            }
+
+            if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(this.getActivity(),
+                        new String[]{Manifest.permission.CAMERA}, 101);
             }
         }
     }
@@ -358,6 +427,91 @@ public class Frag2 extends Fragment  {
             }
         }
 
+
+    private class ClarifaiTask extends AsyncTask<String, Integer, ClarifaiResponse<List<ClarifaiOutput<Concept>>>> {
+
+
+
+        PredictRequest<Concept> predictionResult=null;
+
+
+        protected ClarifaiResponse<List<ClarifaiOutput<Concept>>> doInBackground(String... images) {
+
+            // For each photo we pass, send it off to Clarifai
+            ClarifaiResponse<List<ClarifaiOutput<Concept>>> results=null;
+
+
+            try {
+                ClarifaiClient clarifaiclient = new ClarifaiBuilder(CLARIFY_KEY).buildSync();
+
+
+                Model<Concept> generalModel = clarifaiclient.getDefaultModels().generalModel();
+                predictionResult = generalModel.predict().withInputs(
+                        ClarifaiInput.forImage(new File(pictureFilePath))
+                );
+                results = predictionResult.executeSync();
+
+                // Check if Clarifai thinks the photo contains the object we are looking for
+                Log.i("CLARIFY", "before the results");
+                Log.i("CLARIFY", predictionResult.toString());
+
+
+            } catch (Exception e) {
+                Log.i("CLARIFY_ERROR", "ERROR " + e.toString());
+            }
+
+            return results;
+        }
+
+        protected void onPostExecute(ClarifaiResponse<List<ClarifaiOutput<Concept>>> response) {
+            String[] useless = {"food", "fruit", "juicy", "healthy", "person", "no person", "breakfast", "dark", "delicioous", "refreshment"
+                    , "still life", "life", "tasty", "desktop", "sweet", "salty", "lunch", "dinner", "fast", "traditional", "unhealthy", "blur", "indoors", "bright"
+                    , "paper", "one", "two", "contemporary", "nutrition", "healthcare", "still", "still life", "business", "work", "vitamin", "protein" , "delicious", "grow",
+                    "indoors", "ready", "baking", "wool","meal","ingredients"
+
+            };
+            String max = "french";
+            List<ClarifaiOutput<Concept>> results = response.get();
+            try {
+
+                float maxval = 0;
+                List<String> uselesslist = Arrays.asList(useless);
+                if (results != null) {
+                    int i = 0;
+                    for (ClarifaiOutput<Concept> r : results) {
+                        for (Concept c : r.data()) {
+                            if (maxval < c.value() && !uselesslist.contains(c.name())) {
+
+                                maxval = c.value();
+                                max = c.name();
+                            }
+                            Log.i("CLARIFY", c.toString());
+                            i++;
+                            if(i>10){
+                                break;
+                            }
+                        }
+
+                        Log.i("CLARIFY", "first concept");
+                        break;
+                    }
+                } else {
+                    Log.i("CLARIFY", "results is null");
+                }
+            }catch(Exception e){
+                Log.i("CLARIFY", "Exception in max value");
+                e.printStackTrace();
+            }
+            Log.i("CLARIFY", "Done   "+max);
+            clarifyString = max;
+            searchQuery.invalidate();
+            searchQuery.setText(clarifyString);
+            buttonNutrition.invalidate();
+            buttonNutrition.performClick();
+            Log.i("CLARIFY", "after click  string  "+clarifyString);
+//            textView.setText(max + " " + maxval);
+        }
+    }
 
 
 }

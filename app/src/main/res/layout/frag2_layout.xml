@@ -50,10 +50,22 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/refresh"
-            android:text="REFRESH"
+            android:id="@+id/takeapic"
+            android:shadowColor="@color/colorPrimary"
+            android:text="Dont know name, take a pic"
 
             />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/refresh"
+            android:text="REFRESH LIST"
+            android:shadowColor="@color/prim_color"
+
+            />
+
+
 
         <!--<EditText-->
 

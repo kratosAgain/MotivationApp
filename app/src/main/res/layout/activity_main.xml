@@ -12,17 +12,19 @@
         android:id="@+id/editText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="137dp"
-        android:autofillHints="@string/username"
-        android:drawableStart="@drawable/ic_action_user"
+
         android:ems="10"
+        android:autofillHints="@string/username"
+
+
         android:hint="@string/username"
         android:inputType="textPersonName"
-        android:textSize="16dp" />
+         />
 
     <EditText
         android:id="@+id/editText3"
@@ -33,7 +35,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginStart="20dp"
         android:layout_marginRight="20dp"
-        android:drawableStart="@drawable/ic_action_pass"
+
         android:ems="10"
         android:hint="@string/password"
         android:autofillHints="@string/password"

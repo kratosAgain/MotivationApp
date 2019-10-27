@@ -2,6 +2,8 @@ package com.example.android.motivatinalapp;
 
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,7 +21,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +32,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -42,6 +48,7 @@ import org.json.JSONObject;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -85,6 +92,8 @@ public class Frag2 extends Fragment  {
     CustomListAdapter adapter;
     private String pictureFilePath;
     private String clarifyString="";
+    private PopupWindow POPUP_WINDOW_SCORE = null;
+
 
 
     @Nullable
@@ -122,7 +131,8 @@ public class Frag2 extends Fragment  {
                     e.printStackTrace();
                 }
 
-
+                //popup for asking user
+                popupToAddFoodOrNot();
             }
         });
 
@@ -289,6 +299,66 @@ public class Frag2 extends Fragment  {
         this.imageview2.setImageDrawable(drawable);
     }
 
+    public Bitmap getImageFromUser(){
+        try {
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(userDataMain.image);
+            Bitmap foodImage = BitmapFactory.decodeStream(imageStream);
+//            this.imageView.setImageBitmap(foodImage);
+            imageStream.close();
+            return foodImage;
+        }catch(Exception e){
+            Log.e("ERROR_FOODDETAILS","Error in image");
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public void popupToAddFoodOrNot(){
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.popup_forfood);
+        dialog.setTitle("Really");
+        TextView warning = (TextView) dialog.findViewById(R.id.layout_popup_txtMessage);
+        warning.setText("This food has "+userDataMain.calories+"cal\nGoal : "+Frag1.getCaloriesPerDay());
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.layout_popup_image);
+
+        Bitmap foodImage = getImageFromUser();
+        if(foodImage!=null) {
+            image.setImageBitmap(foodImage);
+        }
+
+        Button dialogButtonNo = (Button) dialog.findViewById(R.id.layout_popup_No);
+        // if button is clicked, close the custom dialog
+        dialogButtonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        Button dialogButtonYes = (Button) dialog.findViewById(R.id.layout_popup_Yes);
+        // if button is clicked, close the custom dialog
+        dialogButtonYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    db.insertUserData(userDataMain);
+
+                }catch(Exception e){
+                    Log.i("Motivation", "Error in userdata base writing inside popup");
+                    e.printStackTrace();
+                }finally{
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        dialog.show();
+
+    }
+
     private static class GetUrlContentTask extends AsyncTask<String, Integer, String> {
         private GetNutritionRequest nutritionRequestInner;
         public void fetchNutritionApiData(GetNutritionRequest nutritionRequest) {
@@ -342,13 +412,13 @@ public class Frag2 extends Fragment  {
                 count++;
                 saveImage(storeLink, query);
 
-                try{
-                    db.insertUserData(userDataMain);
-
-                }catch(Exception e){
-                    Log.i("Motivation", "Erorr in userdata base writing");
-                    e.printStackTrace();
-                }
+//                try{
+//                    db.insertUserData(userDataMain);
+//
+//                }catch(Exception e){
+//                    Log.i("Motivation", "Error in userdata base writing");
+//                    e.printStackTrace();
+//                }
 
                 if (count == 1)
                     break;
@@ -507,7 +577,7 @@ public class Frag2 extends Fragment  {
             searchQuery.invalidate();
             searchQuery.setText(clarifyString);
             buttonNutrition.invalidate();
-            buttonNutrition.performClick();
+//            buttonNutrition.performClick();
             Log.i("CLARIFY", "after click  string  "+clarifyString);
 //            textView.setText(max + " " + maxval);
         }

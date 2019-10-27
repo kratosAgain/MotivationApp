@@ -21,6 +21,7 @@ public class Frag1 extends Fragment {
     public TextView result;
     public EditText weight;
     public TextView effectiveweight;
+    public static int caloriesPerDay;
 
     public RadioGroup radiobutton;
     @Nullable
@@ -126,4 +127,9 @@ public class Frag1 extends Fragment {
 
         return view;
             }
+
+    public static int getCaloriesPerDay() {
+        caloriesPerDay = 2000;
+        return caloriesPerDay;
+    }
 }

@@ -3,11 +3,20 @@ package com.example.android.motivatinalapp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.api.client.util.DateTime;
+
+
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -38,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     "uname text primary key not null, name text not null, email text not null,  pass text not null)";
 
     private static final String TABLE_CREATE_USERDATA = "create table IF NOT EXISTS userdata("+
-     "uname text not null, food_name text not null, calories real not null, carbs real, fat real, protein real, sodium real, iron real, bmi real, date text, gimage blob)";
+     "uname text not null, food_name text not null, calories real not null, carbs real, fat real, protein real, sodium real, iron real, bmi real,  created_date date default CURRENT_TIMESTAMP, gimage blob)";
 
 
 
@@ -103,11 +112,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(this.PROTEIN, u.protein);
         values.put(this.CARBS, u.carbs);
         values.put(this.GIMAGE, u.image);
-        values.put(this.DATE, "datetime('now','localtime')");
+//        values.put(this.DATE, "datetime('now','localtime')");
         values.put(this.BMI, u.bmi);
+
         db.insert(this.TABLE_NAME_USERDATA,null, values);
         db.close();
     }
+
+
 
 
 
@@ -195,11 +207,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c  = null;
         try{
             c =db.rawQuery(query,new String[] {username});
+
+            Log.d("print_cursor", DatabaseUtils.dumpCursorToString(c));
         }catch(Exception e){
             Log.e("CURSOR_ERROR", "error in userdata database handling");
             e.printStackTrace();
         }
 
         return c;
+    }
+
+    public Date getDate(Cursor c){
+        Date dateObject = null;
+        try {
+        String dateString  = c.getString(c.getColumnIndex("created_date"));
+
+            dateObject = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+        }catch(Exception e){
+            Log.e("Date Error","Error in String to date");
+            e.printStackTrace();
+        }
+        return dateObject;
+    }
+
+    public double getNutrientValue(Cursor c,String name){
+        double value = 0;
+
+        try{
+            value = Double.parseDouble(c.getString(c.getColumnIndex(name)));
+        }catch(Exception e){
+            Log.e("Nutrient Error","Error in getting "+name+" value");
+            e.printStackTrace();
+        }
+
+        return value;
     }
 }

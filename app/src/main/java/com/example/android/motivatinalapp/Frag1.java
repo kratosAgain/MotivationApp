@@ -21,14 +21,14 @@ public class Frag1 extends Fragment {
     public TextView result;
     public EditText weight;
     public TextView effectiveweight;
-    public static int caloriesPerDay;
+    public static int caloriesPerDay, carbsPerDay, fatPerDay, proteinPerDay,sodiumPerDay,ironPerDay;
 
     public RadioGroup radiobutton;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.frag1_layout, container, false);
-
+        setNutrientValues();
         weight=(EditText)view.findViewById(R.id.editText);
         height=(EditText)view.findViewById(R.id.editText4);
         result=(TextView)view.findViewById(R.id.textView8);
@@ -128,8 +128,15 @@ public class Frag1 extends Fragment {
         return view;
             }
 
-    public static int getCaloriesPerDay() {
-        caloriesPerDay = 2000;
-        return caloriesPerDay;
+
+    //setting data according to a male 25 year, 170 pounds , 6 feet tall, lightly active lifestyle
+    public static void setNutrientValues(){
+        //calories = 2000 , divided by 10 for scaling
+        caloriesPerDay = 200;
+        carbsPerDay = 350;
+        proteinPerDay = 62;
+        fatPerDay = 80;
+        ironPerDay = 10;
+        sodiumPerDay = 15;
     }
 }

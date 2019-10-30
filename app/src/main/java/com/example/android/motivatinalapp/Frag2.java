@@ -319,7 +319,7 @@ public class Frag2 extends Fragment  {
         dialog.setContentView(R.layout.popup_forfood);
         dialog.setTitle("Really");
         TextView warning = (TextView) dialog.findViewById(R.id.layout_popup_txtMessage);
-        warning.setText("This food has "+userDataMain.calories+"cal\nGoal : "+Frag1.getCaloriesPerDay());
+        warning.setText("This food has "+userDataMain.calories+"cal\nGoal : "+Frag1.carbsPerDay*10);
 
         ImageView image = (ImageView) dialog.findViewById(R.id.layout_popup_image);
 

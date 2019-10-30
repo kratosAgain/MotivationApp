@@ -52,8 +52,10 @@ public class TrackActivity1 extends AppCompatActivity {
         AppBarLayout appBarLayout =(AppBarLayout)findViewById(R.id.appbar);
         ViewPager mViewPager =(ViewPager)findViewById(R.id.container);
         SectionsPagerAdapter viewPagerAdapter =new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.AddFragment(new Frag1(),"Fragment");
-        viewPagerAdapter.AddFragment(new Frag2(),"Fragment");
+        viewPagerAdapter.AddFragment(new Frag1(),"User Info");
+        viewPagerAdapter.AddFragment(new Frag2(),"Food History");
+        viewPagerAdapter.AddFragment(new Frag3(),"User Summary");
+
 
 
 

@@ -26,6 +26,8 @@ public class Signup extends Activity{
             EditText username = (EditText)findViewById(R.id.usernameid);
             EditText password = (EditText)findViewById(R.id.passwordid);
             EditText cpassword = (EditText)findViewById(R.id.cpasswordid);
+            EditText weight=(EditText)findViewById(R.id.heightinput);
+            EditText height=(EditText)findViewById(R.id.weightinput);
 
             String namestr =name.getText().toString();
             Log.d("NAME", namestr);
@@ -34,6 +36,9 @@ public class Signup extends Activity{
             String emailstr =email.getText().toString();
             Log.d("emailstr", emailstr);
             String passstr =password.getText().toString();
+            String weightstr = weight.getText().toString();
+            String heightstr = height.getText().toString();
+
 
             String cpassstr =cpassword.getText().toString();
             if(!passstr.equals(cpassstr))
@@ -48,6 +53,7 @@ public class Signup extends Activity{
                 c.setNam(namestr);
                 c.setEmail(emailstr);
                 c.setPass(passstr);
+                calculatebmi(heightstr,weightstr);
                 c.setUname(usernamestr);
                 db.insertContact(c);
                 currentUser.currentUserName = usernamestr;
@@ -56,5 +62,13 @@ public class Signup extends Activity{
         }
 
     }
+    public void calculatebmi(String h, String w){
+        float fh =Float.parseFloat(h)/100;
+        float fw =Float.parseFloat(w);
+        float bmi = fw/(fh*fh);
+        Log.d("log bmi", Float.toString(bmi));
+        currentUser.currenUserBMI = bmi;
+    }
+
 
 }

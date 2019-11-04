@@ -62,7 +62,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Email-id"
-         />
+        />
 
     <TextView
         android:id="@+id/textView12"
@@ -83,12 +83,54 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="User-Name"
-         />
+        />
+
+    <TextView
+        android:id="@+id/textViewbmi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/username"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="280dp"
+        android:text="Enter your Weight" />
+
+    <EditText
+        android:id="@+id/weightinput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewbmi"
+        android:layout_alignStart="@+id/username"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Weight"
+        />
+    <TextView
+        android:id="@+id/textViewheight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/username"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="400dp"
+        android:text="Enter your Height" />
+
+    <EditText
+        android:id="@+id/heightinput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewheight"
+        android:layout_alignStart="@+id/username"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Height"
+        />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/heightinput"
         android:layout_alignStart="@+id/username"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
@@ -105,7 +147,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Password"
-       />
+        />
 
     <TextView
         android:id="@+id/textView14"

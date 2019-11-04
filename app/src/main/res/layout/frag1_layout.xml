@@ -5,143 +5,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TrackActivity1"
-
     >
 
     <TextView
-        android:id="@+id/weight"
-        android:layout_width="178dp"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="86dp"
-        android:text="Enter your current Weight"
-        android:textColor="@android:color/white"
-
-        />
-
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="83dp"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/weight"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="67dp"
-        android:layout_marginEnd="-75dp"
-        android:ems="10"
-        android:inputType="numberDecimal" />
-
-    <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/profilename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/weight"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="81dp"
-        android:layout_marginTop="143dp"
-        android:text="Enter Height"
-        android:textColor="@android:color/white"
-        tools:text="Enter Weight" />
-
-    <EditText
-        android:id="@+id/editText4"
-        android:layout_width="82dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="123dp"
-        android:layout_marginEnd="84dp"
-        android:ems="10"
-        android:inputType="numberDecimal" />
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="160dp"
+        android:text="ProfileName" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="79dp"
+        android:id="@+id/tagcaloriperday"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText4"
-        android:layout_alignEnd="@+id/textView6"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="-2dp"
-        android:text="Enter Age"
-        android:textColor="@android:color/white" />
-
-    <EditText
-        android:id="@+id/editText5"
-        android:layout_width="49dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/weight"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="174dp"
-        android:layout_marginTop="158dp"
-        android:ems="10"
-        android:inputType="number" />
+        android:layout_marginTop="140dp"
+        android:layout_marginLeft="50dp"
+        android:text="Calories per day" />
 
     <TextView
-        android:id="@+id/textView8"
-        android:layout_width="111dp"
+        android:id="@+id/calorieperday"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView6"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="349dp"
-
-        android:textColor="@android:color/white" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="154dp"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/weight"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="-63dp"
-        android:layout_marginBottom="137dp"
-
-        android:text="calculateBMI" />
-
-    <RadioGroup
-        android:id="@+id/radiogroup"
-        android:layout_width="167dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView6"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="209dp"
-        >
-
-        <RadioButton
-            android:id="@+id/radiofemale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Female"
-            />
-
-        <RadioButton
-            android:id="@+id/radiomale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Male"
-            />
-    </RadioGroup>
+        android:layout_marginTop="140dp"
+        android:layout_marginLeft="170dp"
+        android:text="Calories per day" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="84dp"
+        android:id="@+id/tagcarbsperday"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView6"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="232dp"
-        android:text="Gender" />
+        android:layout_marginTop="190dp"
+        android:layout_marginLeft="50dp"
+        android:text="Carbs per day " />
+    <TextView
+        android:id="@+id/carbsperday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:layout_marginLeft="170dp"
+        android:text="carbs" />
+
 
     <TextView
-        android:id="@+id/textView9"
-        android:layout_width="108dp"
+        android:id="@+id/tagfat"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="266dp" />
+        android:layout_marginTop="240dp"
+        android:layout_marginLeft="70dp"
+        android:text="Fat per day " />
+    <TextView
+        android:id="@+id/fat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="240dp"
+        android:layout_marginLeft="170dp"
+        android:text="fat" />
+    <TextView
+        android:id="@+id/tagprotient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="290dp"
+        android:layout_marginLeft="60dp"
+        android:text="Protient per day " />
+    <TextView
+        android:id="@+id/protient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="290dp"
+        android:layout_marginLeft="170dp"
+        android:text="Protient" />
+
+    <TextView
+        android:id="@+id/tagbmi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="340dp"
+        android:text="BMI" />
+
+    <TextView
+        android:id="@+id/textbmi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="340dp"
+        android:text="BMI" />
+
+
 
 
 </RelativeLayout>

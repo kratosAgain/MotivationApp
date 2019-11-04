@@ -81,7 +81,7 @@ public class Frag3 extends Fragment {
         }};
         this.makeNutrientsComparisonBarChart();
 
-
+        this.weeklyGraphOfCalories();
 
 
         return view;

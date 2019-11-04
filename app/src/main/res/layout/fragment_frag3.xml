@@ -1,28 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Frag3">
+    android:layout_height="wrap_content"
+    android:id="@+id/mainLayout">
 
-
-
-
-<!--    <com.jjoe64.graphview.GraphView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="200dip"-->
-<!--        android:id="@+id/line_graph"/>-->
-
-
-<!--    <com.jjoe64.graphview.GraphView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="200dip"-->
-<!--        android:id="@+id/bar_graph" />-->
-
-
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/nutrients_day_compare_barchart"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-</FrameLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/secondLayout">
+
+            <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--xmlns:tools="http://schemas.android.com/tools"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--tools:context=".Frag3">-->
+
+            <!--    <com.jjoe64.graphview.GraphView-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="200dip"-->
+            <!--        android:id="@+id/line_graph"/>-->
+
+
+            <!--    <com.jjoe64.graphview.GraphView-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="200dip"-->
+            <!--        android:id="@+id/bar_graph" />-->
+
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/nutrients_day_compare_barchart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="100dp"
+
+                />
+
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/nutrients_week_compare_barchart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/nutrients_day_compare_barchart"
+                android:layout_marginTop="100dp" />
+
+
+
+        </RelativeLayout>
+
+        <!--</FrameLayout>-->
+    </ScrollView>
+</RelativeLayout>

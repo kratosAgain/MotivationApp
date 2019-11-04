@@ -1,5 +1,6 @@
 package com.example.android.motivatinalapp;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +42,7 @@ public class Frag3 extends Fragment {
 
     public GraphView linegraph , bargraph;
     public BarChart nutrientsDayCompareBarchart;
+    public BarChart nutrients_week_compare_barchart;
     DatabaseHelper db = null;
 
 
@@ -61,7 +64,7 @@ public class Frag3 extends Fragment {
 //        this.linegraph = (GraphView) view.findViewById(R.id.line_graph);
 //        this.bargraph = (GraphView) view.findViewById(R.id.bar_graph);
         this.nutrientsDayCompareBarchart = view.findViewById(R.id.nutrients_day_compare_barchart);
-
+        this.nutrients_week_compare_barchart = view.findViewById(R.id.nutrients_week_compare_barchart);
 //        this.makegraph();
 //        this.lastAllHoursGraphOfCalories();
 
@@ -144,6 +147,114 @@ public class Frag3 extends Fragment {
         this.bargraph.addSeries(barData);
     }
 
+    @TargetApi(26)
+    public void weeklyGraphOfCalories(){
+        Cursor cursor = db.searchUserDatabase(currentUser.currentUserName);
+        int i = 0;
+        if (cursor==null) {
+            Log.i("Cursor","Cursor is Null");
+            return;
+        }
+        List<BarEntry> entriesRecommended = new ArrayList<>();
+        List<BarEntry> entriesRecorded = new ArrayList<>();
+        List<BarEntry> entriesmaxvals = new ArrayList<>();
+        List<BarEntry> entriesminvals = new ArrayList<>();
+
+        HashMap<String, Double> nutrientsMap = new HashMap();
+        ArrayList<String> nutrientsList = new ArrayList<>();
+        HashMap<String,Double> maxvals = new HashMap<>();
+        HashMap<String,Double> minvals = new HashMap<>();
+
+        for(String s:this.nutrientValues.keySet()){
+            nutrientsMap.put(s,0.0);
+            nutrientsList.add(s);
+            maxvals.put(s,20.0);
+            minvals.put(s,40.0);
+        }
+
+        //here
+        Calendar currenttime = Calendar.getInstance();
+        currenttime.add(Calendar.DATE,-7);
+        Date curtime = currenttime.getTime();
+        String strtime = curtime.toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateObject = sdf.format(curtime);
+        String todaydate = sdf.format(Calendar.DATE);
+
+        double nut = 0;
+        while(cursor.moveToNext()){
+            try{
+                Date day = db.getDate(cursor);
+                String presentday = sdf.format(day);
+                Log.i("presentday cursor",presentday);
+                Log.i("todaydate",todaydate );
+                if(presentday!=dateObject)
+                    continue;
+                if(presentday== todaydate)
+                    break;
+
+                for(String s: this.nutrientValues.keySet()) {
+                    nut= db.getNutrientValue(cursor, s);
+//                    if (maxvals.getOrDefault(s,0.0)<nut)
+//                        maxvals.put(s,nut);
+//                    if (minvals.getOrDefault(s,0.0)>nut)
+//                        minvals.put(s,nut);
+                    if (s.equals("sodium")) {
+                        nut = nut / 10.0;
+                    }else if(s.equals("calories")){
+                        nut = nut/10.0;
+                    }
+                    nutrientsMap.put(s, nutrientsMap.get(s) + nut);
+                }
+            }catch(Exception e){
+                Log.e("CURSOR_ERROR","error in making bar chart from cursor");
+                e.printStackTrace();
+            }
+        }
+        cursor.close();
+
+
+        for(String s:this.nutrientValues.keySet()) {
+            entriesRecommended.add(new BarEntry(i, 5*this.nutrientValues.get(s).floatValue()));
+            entriesRecorded.add(new BarEntry(i, 7*nutrientsMap.get(s).floatValue()));
+            entriesmaxvals.add(new BarEntry(i,maxvals.get(s).floatValue()));
+            entriesminvals.add(new BarEntry(i,minvals.get(s).floatValue()));
+            i++;
+        }
+
+
+        //making bar chart start
+        BarDataSet set1 = new BarDataSet(entriesRecommended, "Recommended");
+        set1.setColor(Color.rgb(0, 155, 0));
+        BarDataSet set2 = new BarDataSet(entriesRecorded, "Taken");
+        set2.setColor(Color.rgb(155, 0, 0));
+        BarDataSet set3 = new BarDataSet(entriesmaxvals,"Max value taken");
+        set3.setColor(android.R.color.holo_blue_dark);
+        BarDataSet set4 = new BarDataSet(entriesminvals,"Min value taken");
+        set3.setColor(android.R.color.black);
+
+
+        float groupSpace = 0.06f;
+        float barSpace = 0.01f; // x2 dataset
+        float barWidth = 0.40f; // x2 dataset
+
+        BarData data = new BarData(set1, set2,set3,set4);
+        data.setBarWidth(barWidth); // set the width of each bar
+        this.nutrients_week_compare_barchart.setData(data);
+        this.nutrients_week_compare_barchart.groupBars(0, groupSpace, barSpace); // perform the "explicit" grouping
+        XAxis xA = this.nutrients_week_compare_barchart.getXAxis();
+        xA.setValueFormatter(new ValueFormatter(){
+            public String getFormattedValue(float value){
+                return nutrientsList.get((int)value);
+            }
+        } );
+        this.nutrients_week_compare_barchart.setFitBars(true);
+        this.nutrients_week_compare_barchart.invalidate();
+
+        //here
+
+
+    }
 
     public void makeNutrientsComparisonBarChart(){
 

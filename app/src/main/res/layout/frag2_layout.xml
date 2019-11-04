@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TrackActivity1">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+
+            <EditText
+                android:id="@+id/query"
+                android:layout_width="120pt"
+                android:layout_height="wrap_content"
+                android:hint="Search Nutrients"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonnutrition"
+                android:layout_width="116dp"
+                android:layout_height="fill_parent"
+
+                android:text="ADD FOOD"
+
+                tools:layout_editor_absoluteX="2dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+
+
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/takeapic"
+            android:shadowColor="@color/colorPrimary"
+            android:text="Dont know name, take a pic"
+
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/refresh"
+            android:text="REFRESH LIST"
+            android:shadowColor="@color/prim_color"
+
+            />
+
+
+
+        <!--<EditText-->
+
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ems="10"-->
+            <!--android:inputType="textPersonName"-->
+
+            <!--/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/googleSearchButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Google Search"-->
+            <!--tools:layout_editor_absoluteX="209dp"-->
+            <!--tools:layout_editor_absoluteY="0dp" />-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/records"
+                android:smoothScrollbar="true"
+                android:alwaysDrawnWithCache="true"
+                >
+
+
+
+            </ListView>
+
+
+
+            <!--<ImageView-->
+                <!--android:id="@+id/imageView1"-->
+                <!--android:layout_width="230dp"-->
+                <!--android:layout_height="333dp"-->
+                <!--tools:layout_editor_absoluteX="-12dp"-->
+                <!--tools:layout_editor_absoluteY="134dp"-->
+                <!--tools:srcCompat="@tools:sample/avatars" />-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/imageView2"-->
+                <!--android:layout_width="230dp"-->
+                <!--android:layout_height="333dp"-->
+                <!--tools:layout_editor_absoluteX="-12dp"-->
+                <!--tools:layout_editor_absoluteY="134dp"-->
+                <!--tools:srcCompat="@tools:sample/avatars" />-->
+
+        </LinearLayout>
+
+        <!--<EditText-->
+            <!--android:id="@+id/editText6"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ems="10"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:text="Name" />-->
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".CheatFood"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -27,8 +28,8 @@
             android:label="@string/title_activity_track1"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Signup" />
-        <activity android:name=".FootDetails"></activity>
-        <activity android:name=".ClarifaiActivity"></activity>
+        <activity android:name=".FootDetails" />
+        <activity android:name=".ClarifaiActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

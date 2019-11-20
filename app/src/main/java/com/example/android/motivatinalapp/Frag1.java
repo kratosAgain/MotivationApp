@@ -1,5 +1,11 @@
 package com.example.android.motivatinalapp;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,20 +14,41 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.api.services.customsearch.model.Result;
+
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Frag1 extends Fragment {
     public EditText height;
     public TextView result;
     public EditText weight;
     public TextView effectiveweight;
+    public ListView cheatlistview;
+    List<UserData> cheatlist ;
     public static int caloriesPerDay, carbsPerDay, fatPerDay, proteinPerDay,sodiumPerDay,ironPerDay;
+    public String searchString;
+    public static UserData userDataMain;
+    DatabaseHelper db = null;
+
+    public static String[] cheatFoods = {"Pepperoni Pizza","Hamburger","Oreo Cake"};
 
     public RadioGroup radiobutton;
     @Nullable
@@ -44,101 +71,16 @@ public class Frag1 extends Fragment {
         fatperday.setText(Integer.toString(fatPerDay));
         TextView protientperday = (TextView)view.findViewById(R.id.protient);
         protientperday.setText(Integer.toString(proteinPerDay));
-//        weight=(EditText)view.findViewById(R.id.editText);
-//        height=(EditText)view.findViewById(R.id.editText4);
-//        result=(TextView)view.findViewById(R.id.textView8);
-//        effectiveweight=(TextView)view.findViewById(R.id.textView9);
-//        final Button button = (Button)view.findViewById(R.id.button2);
-//        final RadioGroup radioSexGroup = (RadioGroup)view.findViewById(R.id.radiogroup);
-//
-//        button.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//
-//
-//                String h =height.getText().toString();
-//                Log.d("log height", h);
-//
-//                String w =weight.getText().toString();
-//                Log.d("log weight", w);
-//                if(h!=null && w!=null)
-//                {
-//                    float fh =Float.parseFloat(h)/100;
-//                    float fw =Float.parseFloat(w);
-//                    float bmi = fw/(fh*fh);
-//                    Log.d("log bmi", Float.toString(bmi));
-//                    displayBMI(bmi);
-//                    currentUser.currenUserBMI = bmi;
-//
-//                }
-//
-//
-//            }
-//
-//
-//
-//            public void displayBMI(float bmi)
-//            {
-//                String bmilable="";
-//                if(Float.compare(bmi,15f)<=0){
-//                    bmilable="very Severly Underweight";
-//                }
-//                else if(Float.compare(bmi,15f)>0 && Float.compare(bmi,16f)<=0)
-//                {
-//                    bmilable="very Underweight"; }
-//                else if(Float.compare(bmi,16f)>0 && Float.compare(bmi,18.5f)<=0)
-//                {
-//                    bmilable="Underweight"; }
-//                else if(Float.compare(bmi,18.5f)>0 && Float.compare(bmi,25f)<=0)
-//                {
-//                    bmilable="Normal"; }
-//                else if(Float.compare(bmi,25f)>0 && Float.compare(bmi,30f)<=0)
-//                {
-//                    bmilable="Overweight"; }
-//                else if(Float.compare(bmi,30f)>0 && Float.compare(bmi,35f)<=0)
-//                {
-//                    bmilable="Obese_class_i"; }
-//                else if(Float.compare(bmi,35f)>0 && Float.compare(bmi,40f)<=0)
-//                {
-//                    bmilable="Obese_class_ii"; }
-//                else{
-//                    bmilable="Obese_class_iii";
-//                }
-//                result.setText(bmilable);
-//            }
-//        });
-//            radioSexGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//
-//
-//                @Override
-//                public void onCheckedChanged(RadioGroup group, int checkedId) {
-//
-//                    switch (checkedId) {
-//                        case R.id.radiofemale:
-//                            String h1 = height.getText().toString();
-//                            int eh = Integer.parseInt(h1) - 100;
-//                            double ewf = (eh - (eh * (0.15)));
-//                            effectiveweight.setText("You Ideal Weigh should be: "+" "+String.valueOf(ewf));
-//
-//                            Log.d("log eeeeeeeewf", String.valueOf(ewf));
-//
-//                            break;
-//                        case R.id.radiomale:
-//                            String h2 = height.getText().toString();
-//                            int eh1 = Integer.parseInt(h2) - 100;
-//                            Log.d("log eeeeeeeemale", "insidemale");
-//                            double ewm = (eh1 - (eh1 * (0.10)));
-//                            effectiveweight.setText("You Ideal Weigh should be:"+" "+ String.valueOf(ewm));
-//                            Log.d("log eeeeeeeemale....", String.valueOf(ewm));
-//
-//                            break;
-//                    }
-//                }
-//            });
 
+        //cheat food start
+        userDataMain = new UserData();
+        db =new DatabaseHelper(getActivity());
 
+        cheatlistview = view.findViewById(R.id.cheat_foodlist);
+        cheatlist = new ArrayList<>();
+        this.showCheatList();
+
+        //cheat food end
 
         return view;
             }
@@ -154,4 +96,26 @@ public class Frag1 extends Fragment {
         ironPerDay = 10;
         sodiumPerDay = 15;
     }
+
+
+
+    public void showCheatList(){
+        DatabaseHelper db =new DatabaseHelper(getActivity());
+        cheatlist = db.getUserCheatList(currentUser.currentUserName);
+        CustomListAdapter adapter = new CustomListAdapter(getActivity(), db, cheatlist);
+        this.cheatlistview.setAdapter(adapter);
+        this.cheatlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), FootDetails.class);
+                UserData u = cheatlist.get(position);
+                intent.putExtra("userdata", u);
+                getActivity().startActivity(intent);
+
+            }
+        });
+
+    }
+
+
 }

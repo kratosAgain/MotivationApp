@@ -25,11 +25,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME ="contacts.db";
     private static final String TABLE_NAME_CONTACTS = "contacts";
     private static final String TABLE_NAME_USERDATA = "userdata";
+    private static final String TABLE_NAME_CHEAT = "cheatdata";
     private static final String COLUMN_ID ="id";
     private static final String COLUMN_NAME ="name";
     private static final String COLUMN_EMAIL ="email";
     private static final String COLUMN_UNAME ="uname";
     private static final String COLUMN_PASS ="pass";
+    private static final String COLUMN_FOOD ="foods";
 
 
     private static final String FOOD_NAME = "food_name";
@@ -49,7 +51,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_CREATE_USERDATA = "create table IF NOT EXISTS userdata("+
      "uname text not null, food_name text not null, calories real not null, carbs real, fat real, protein real, sodium real, iron real, bmi real,  created_date date default CURRENT_TIMESTAMP, gimage blob)";
 
-
+    private static final String TABLE_CREATE_CHEATDATA ="create table IF NOT EXISTS cheatdata("+
+            "uname text not null, food_name text not null, calories real not null, carbs real, fat real, protein real, sodium real, iron real, bmi real,  created_date date default CURRENT_TIMESTAMP, gimage blob)";
 
 
     public DatabaseHelper(Context context)
@@ -67,6 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE_CONTACTS);
         db.execSQL(TABLE_CREATE_USERDATA);
+        db.execSQL(TABLE_CREATE_CHEATDATA);
 
         this.db=db;
 
@@ -78,6 +82,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query ="DROP TABLE IF EXISTS " +this.TABLE_NAME_CONTACTS;
         db.execSQL(query);
         query ="DROP TABLE IF EXISTS " +this.TABLE_NAME_USERDATA;
+        db.execSQL(query);
+        query ="DROP TABLE IF EXISTS " +this.TABLE_CREATE_CHEATDATA;
         db.execSQL(query);
 
         this.onCreate(db);
@@ -120,6 +126,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void insertCheatData(UserData u){
+        db = this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(this.COLUMN_UNAME, u.userName);
+        values.put(this.FOOD_NAME, u.foodName);
+        values.put(this.CALORIES, u.calories);
+        values.put(this.FAT, u.fat);
+        values.put(this.IRON, u.iron);
+        values.put(this.SODIUM, u.sodium);
+        values.put(this.PROTEIN, u.protein);
+        values.put(this.CARBS, u.carbs);
+        values.put(this.GIMAGE, u.image);
+
+        values.put(this.BMI, u.bmi);
+        db.insert(this.TABLE_NAME_CHEAT,null, values);
+        db.close();
+    }
 
 
 
@@ -200,6 +223,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return data;
     }
+
+    public List<UserData> getUserCheatList(String username){
+        Cursor c = this.searchCheatDatabase(username);
+        List<UserData> data = new ArrayList<>();
+        try{
+            if(c.moveToFirst()){
+                do{
+
+                    /**
+                     * private static final String TABLE_CREATE_USERDATA = "create table userdata("+
+                     *      "uname text not null, food_name text not null, calories real not null, carbs real,
+                     *      fat real, protein real, sodium real, iron real, bmi real, date text, gimage blob)";
+                     */
+                    UserData u = new UserData();
+                    u.setUserName(c.getString(0));
+                    u.setFoodName(c.getString(1));
+                    u.setCalories(Double.parseDouble(c.getString(2)));
+                    u.setCarbs(Double.parseDouble(c.getString(3)));
+                    u.setFat(Double.parseDouble(c.getString(4)));
+                    u.setProtein(Double.parseDouble(c.getString(5)));
+                    u.setSodium(Double.parseDouble(c.getString(6)));
+                    u.setIron(Double.parseDouble(c.getString(7)));
+                    u.setBmi(Double.parseDouble(c.getString(8)));
+                    u.setDate(c.getString(9));
+                    u.setImage(c.getBlob(10));
+                    data.add(u);
+                }while(c.moveToNext());
+            }
+        }catch(Exception e){
+            Log.e("CURSOR_ERROR","error in making cheat list from cursor");
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public Cursor searchCheatDatabase(String username){
+        db = this.getReadableDatabase();
+        String query = "select * from "+ this.TABLE_NAME_CHEAT+" WHERE uname = ?";
+        Cursor c  = null;
+        try{
+            c =db.rawQuery(query,new String[] {username});
+
+            Log.d("print_cursor", DatabaseUtils.dumpCursorToString(c));
+        }catch(Exception e){
+            Log.e("CURSOR_ERROR", "error in userdata database handling");
+            e.printStackTrace();
+        }
+
+        return c;
+    }
+
 
     public Cursor searchUserDatabase(String username){
         db = this.getReadableDatabase();

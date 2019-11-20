@@ -77,6 +77,7 @@ public class Frag2 extends Fragment  {
     static final int REQUEST_TAKE_PHOTO = 1;
     private Button buttonNutrition, searchImageButton, googleSearchButton, refresh, takeapic;
     private static EditText searchQuery;
+    public static String searchString="";
     private GetNutritionRequest nutritionRequest;
     private ImageView imageview2 ;
     ListView listview = null;
@@ -93,6 +94,7 @@ public class Frag2 extends Fragment  {
     private String pictureFilePath;
     private String clarifyString="";
     private PopupWindow POPUP_WINDOW_SCORE = null;
+    public static boolean searchFlag= true;
 
 
 
@@ -104,6 +106,7 @@ public class Frag2 extends Fragment  {
         refresh = view.findViewById(R.id.refresh);
 //        googleSearchButton = (Button)view.findViewById(R.id.googleSearchButton);
         searchQuery = view.findViewById(R.id.query);
+        searchString = "";
 //        imageview2 =  (ImageView)view.findViewById(R.id.imageView2);
         listview = view.findViewById(R.id.records);
         takeapic = view.findViewById(R.id.takeapic);
@@ -125,14 +128,19 @@ public class Frag2 extends Fragment  {
                 }
                 try {
                     GoogleImageSearchTask task = new GoogleImageSearchTask();
-                    task.execute(searchQuery.getText().toString());
+
+                        task.execute(searchQuery.getText().toString());
+
                 }catch(Exception e){
                     Log.i("Motivation", "Error in google request");
                     e.printStackTrace();
                 }
 
+
                 //popup for asking user
                 popupToAddFoodOrNot();
+
+
             }
         });
 
@@ -359,11 +367,13 @@ public class Frag2 extends Fragment  {
 
     }
 
-    private static class GetUrlContentTask extends AsyncTask<String, Integer, String> {
+    public static class GetUrlContentTask extends AsyncTask<String, Integer, String> {
         private GetNutritionRequest nutritionRequestInner;
         public void fetchNutritionApiData(GetNutritionRequest nutritionRequest) {
             try {
-                JSONObject obj = nutritionRequest.MyGETRequest(searchQuery.getText().toString());
+                String qr = searchQuery.getText().toString();
+
+                JSONObject obj = nutritionRequest.MyGETRequest(qr);
                 userDataMain.setCalories(Double.parseDouble(obj.getString("nf_calories")));
                 userDataMain.setFat(Double.parseDouble(obj.getString("nf_total_fat")));
                 userDataMain.setIron(Double.parseDouble(obj.getString("nf_iron_dv")));
@@ -398,7 +408,7 @@ public class Frag2 extends Fragment  {
         }
     }
 
-    private class GoogleImageSearchTask extends AsyncTask<String, Integer, String> {
+    public  class GoogleImageSearchTask extends AsyncTask<String, Integer, String> {
         private GoogleImageSearch search;
         Drawable drawable;
         private void searchImages(String query) throws Exception {
@@ -498,7 +508,7 @@ public class Frag2 extends Fragment  {
         }
 
 
-    private class ClarifaiTask extends AsyncTask<String, Integer, ClarifaiResponse<List<ClarifaiOutput<Concept>>>> {
+    public class ClarifaiTask extends AsyncTask<String, Integer, ClarifaiResponse<List<ClarifaiOutput<Concept>>>> {
 
 
 
@@ -582,6 +592,8 @@ public class Frag2 extends Fragment  {
 //            textView.setText(max + " " + maxval);
         }
     }
+
+
 
 
 }

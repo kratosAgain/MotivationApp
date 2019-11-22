@@ -43,9 +43,6 @@ public class CheatFood extends AppCompatActivity {
         this.addItemsInDropDown();
         this.addListenerOnSpinnerItemSelection();
         this.dropdown.setPrompt("Choose a cheat food");
-
-
-
         userDataMain = new UserData();
         db =new DatabaseHelper(this);
 

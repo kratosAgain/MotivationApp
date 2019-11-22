@@ -43,7 +43,9 @@ public class Frag1 extends Fragment {
     public TextView effectiveweight;
     public ListView cheatlistview;
     List<UserData> cheatlist ;
-    public static int caloriesPerDay, carbsPerDay, fatPerDay, proteinPerDay,sodiumPerDay,ironPerDay;
+    public static double caloriesPerDay, carbsPerDay, fatPerDay, proteinPerDay,sodiumPerDay,ironPerDay;
+
+    public static double protein,fat, carbs,iron;
     public String searchString;
     public static UserData userDataMain;
     DatabaseHelper db = null;
@@ -59,18 +61,18 @@ public class Frag1 extends Fragment {
 
         String name = currentUser.currentUserName;
         double bmi = currentUser.currenUserBMI;
-        TextView username=(TextView) view.findViewById(R.id.profilename);
-        username.setText(name);
+//        TextView username=(TextView) view.findViewById(R.id.pro);
+//        username.setText(name);
         TextView bmitext = (TextView)view.findViewById(R.id.textbmi);
         bmitext.setText(Double.toString(bmi));
-        TextView caloriesperday = (TextView)view.findViewById(R.id.calorieperday);
-        caloriesperday.setText(Integer.toString(caloriesPerDay));
+//        TextView caloriesperday = (TextView)view.findViewById(R.id.);
+//        caloriesperday.setText(Integer.toString(caloriesPerDay));
         TextView carbsperday = (TextView)view.findViewById(R.id.carbsperday);
-        carbsperday.setText(Integer.toString(carbsPerDay));
+        carbsperday.setText(Double.toString(carbsPerDay));
         TextView fatperday = (TextView)view.findViewById(R.id.fat);
-        fatperday.setText(Integer.toString(fatPerDay));
+        fatperday.setText(Double.toString(fatPerDay));
         TextView protientperday = (TextView)view.findViewById(R.id.protient);
-        protientperday.setText(Integer.toString(proteinPerDay));
+        protientperday.setText(Double.toString(proteinPerDay));
 
         //cheat food start
         userDataMain = new UserData();
@@ -81,25 +83,55 @@ public class Frag1 extends Fragment {
         this.showCheatList();
 
         //cheat food end
-
-
-
         return view;
             }
-
 
     //setting data according to a male 25 year, 170 pounds , 6 feet tall, lightly active lifestyle
     public static void setNutrientValues(){
         //calories = 2000 , divided by 10 for scaling
+        calculatenurtient();
         caloriesPerDay = 200;
-        carbsPerDay = 350;
-        proteinPerDay = 62;
-        fatPerDay = 80;
-        ironPerDay = 10;
+//        carbsPerDay = 350;
+//        proteinPerDay = 62;
+//        fatPerDay = 80;
+//        ironPerDay = 10;
         sodiumPerDay = 15;
     }
 
+    public static void calculatenurtient() {
+        if (currentUser.liefstyle == "working"){
+            proteinPerDay = currentUser.weight / 2.2 * 1.7;
+            carbsPerDay = currentUser.weight/ 3.5;
+        }
+        else if (currentUser.liefstyle == "Active") {
+            proteinPerDay = currentUser.weight / 2.2 * 0.8;
+            carbsPerDay = currentUser.weight/ 3.0;
 
+        }
+        else if (currentUser.liefstyle == "Moderate"){
+            proteinPerDay = currentUser.weight / 2.2 * 0.6;
+            carbsPerDay = currentUser.weight/ 2.25;
+
+        }
+
+        else if (currentUser.liefstyle == "Light activity") {
+            proteinPerDay = currentUser.weight / 2.2 * 0.5;
+            carbsPerDay = currentUser.weight/ 2.0;
+
+        }
+        else{
+            proteinPerDay = currentUser.weight / 2.2 * 0.3;
+            carbsPerDay = currentUser.weight/ 1.25;
+
+
+        }
+
+        fatPerDay = caloriesPerDay % 0.3;
+        if (currentUser.gender=="Female")
+            ironPerDay = 18;
+        else
+            ironPerDay =8;
+    }
 
     public void showCheatList(){
         DatabaseHelper db =new DatabaseHelper(getActivity());

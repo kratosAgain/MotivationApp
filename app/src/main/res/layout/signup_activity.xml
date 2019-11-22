@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/bsignupid"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
 
     <TextView
         android:id="@+id/textView5"
@@ -21,8 +21,6 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="50dp"
         android:layout_weight="1"
         android:text="Enter your Name"
         android:textSize="16sp" />
@@ -31,10 +29,6 @@
         android:id="@+id/nameid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/username"
-        android:layout_alignStart="@+id/username"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="50dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Name"
@@ -44,10 +38,6 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/username"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="127dp"
         android:text="Enter Email-Id"
 
         />
@@ -56,8 +46,6 @@
         android:id="@+id/emailid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView11"
-        android:layout_alignStart="@+id/username"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Email-id"
@@ -67,18 +55,12 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/username"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="193dp"
         android:text="User Name" />
 
     <EditText
         android:id="@+id/usernameid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView12"
-        android:layout_alignStart="@+id/username"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="User-Name"
@@ -88,18 +70,12 @@
         android:id="@+id/textViewbmi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/username"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="280dp"
         android:text="Enter your Weight" />
 
     <EditText
         android:id="@+id/weightinput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewbmi"
-        android:layout_alignStart="@+id/username"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Weight"
@@ -108,41 +84,39 @@
         android:id="@+id/textViewheight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/username"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="400dp"
         android:text="Enter your Height" />
 
     <EditText
         android:id="@+id/heightinput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewheight"
-        android:layout_alignStart="@+id/username"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Height"
-        />
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/lifestyleid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="select lifestyle" />
+
+    <EditText
+        android:id="@+id/Lifestyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Lifestyle" />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/heightinput"
-        android:layout_alignStart="@+id/username"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="234dp"
+        android:layout_height="24dp"
         android:text="Password" />
 
     <EditText
         android:id="@+id/passwordid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView13"
-        android:layout_alignStart="@+id/username"
-        android:layout_marginTop="-234dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Password"
@@ -152,24 +126,16 @@
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/passwordid"
-        android:layout_alignStart="@+id/username"
         android:text="Confirm Password" />
 
     <EditText
         android:id="@+id/cpasswordid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView14"
-        android:layout_alignStart="@+id/textView13"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Confirm Password"
         />
-
-
-
-
 
     <Button
         android:id="@+id/button"
@@ -181,4 +147,4 @@
         android:layout_marginBottom="50dp"
         android:text="Sign Up!" />
 
-</RelativeLayout>
+</LinearLayout>

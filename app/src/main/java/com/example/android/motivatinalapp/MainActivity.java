@@ -23,9 +23,6 @@ public  class MainActivity extends AppCompatActivity {
     DatabaseHelper helper = null;
     currentUser cu = null;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

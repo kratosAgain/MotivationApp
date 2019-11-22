@@ -51,6 +51,7 @@ public class Signup extends Activity{
             EditText weight=(EditText)findViewById(R.id.heightinput);
             EditText height=(EditText)findViewById(R.id.weightinput);
 
+            EditText lifestyle = (EditText)findViewById(R.id.Lifestyle);
 
 
             String namestr =name.getText().toString();
@@ -62,8 +63,11 @@ public class Signup extends Activity{
             String passstr =password.getText().toString();
             String weightstr = weight.getText().toString();
             String heightstr = height.getText().toString();
+            String lifestylestr = lifestyle.getText().toString();
 
-
+            currentUser.height = Integer.parseInt(heightstr);
+            currentUser.weight = Integer.parseInt(weightstr);
+            currentUser.liefstyle = lifestylestr;
             String cpassstr =cpassword.getText().toString();
             if(!passstr.equals(cpassstr))
             {

@@ -181,6 +181,7 @@ public class Frag3 extends Fragment {
         String strtime = curtime.toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateObject = sdf.format(curtime);
+        Date todaysdate = Calendar.getInstance().getTime();
         String todaydate = sdf.format(Calendar.DATE);
 
         double nut = 0;
@@ -190,8 +191,10 @@ public class Frag3 extends Fragment {
                 String presentday = sdf.format(day);
                 Log.i("presentday cursor",presentday);
                 Log.i("todaydate",todaydate );
-                if(presentday!=dateObject)
-                    continue;
+                if (day.after(curtime)&& day.before(todaysdate))
+                {
+//                if(presentday!=dateObject)
+//                    continue;
                 if(presentday== todaydate)
                     break;
 
@@ -207,7 +210,7 @@ public class Frag3 extends Fragment {
                         nut = nut/10.0;
                     }
                     nutrientsMap.put(s, nutrientsMap.get(s) + nut);
-                }
+                }}
             }catch(Exception e){
                 Log.e("CURSOR_ERROR","error in making bar chart from cursor");
                 e.printStackTrace();

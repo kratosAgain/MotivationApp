@@ -24,6 +24,12 @@ public class Frag1 extends Fragment {
     public TextView effectiveweight;
     public static int caloriesPerDay, carbsPerDay, fatPerDay, proteinPerDay,sodiumPerDay,ironPerDay;
 
+    public static double protein,fat;
+    public String searchString;
+    public static UserData userDataMain;
+    DatabaseHelper db = null;
+
+    public static String[] cheatFoods = {"Pepperoni Pizza","Hamburger","Oreo Cake"};
     public RadioGroup radiobutton;
     @Nullable
     @Override
@@ -145,6 +151,23 @@ public class Frag1 extends Fragment {
         fatPerDay = 80;
         ironPerDay = 10;
         sodiumPerDay = 15;
+    }
+
+    public static void calculatenurtient(){
+        if (currentUser.liefstyle=="working")
+            protein = currentUser.weight/2.2 *1.7;
+        else if(currentUser.liefstyle=="Active")
+            protein = currentUser.weight/2.2 *0.8;
+        else if(currentUser.liefstyle=="Moderate")
+            protein = currentUser.weight/2.2 *0.6;
+        else if(currentUser.liefstyle=="Light activity")
+            protein = currentUser.weight/2.2 *0.5;
+        else
+            protein = currentUser.weight/2.2 * 0.3;
+
+        fat = caloriesPerDay % 0.3;
+
+
     }
 
 

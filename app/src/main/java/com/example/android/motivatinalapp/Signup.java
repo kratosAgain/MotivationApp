@@ -15,17 +15,20 @@ public class Signup extends Activity{
         setContentView(R.layout.signup_activity);
         db =new DatabaseHelper(this);
     }
-
     public void onSignup(View v)
     {
         if(v.getId()==R.id.button)
         {
             EditText name = (EditText)findViewById(R.id.nameid);
-
             EditText email = (EditText)findViewById(R.id.emailid);
             EditText username = (EditText)findViewById(R.id.usernameid);
             EditText password = (EditText)findViewById(R.id.passwordid);
             EditText cpassword = (EditText)findViewById(R.id.cpasswordid);
+
+            EditText weight=(EditText)findViewById(R.id.bmiinput);
+            EditText height=(EditText)findViewById(R.id.heightinput);
+            EditText lifestyle = (EditText)findViewById(R.id.Lifestyle);
+
 
             String namestr =name.getText().toString();
             Log.d("NAME", namestr);
@@ -35,6 +38,13 @@ public class Signup extends Activity{
             Log.d("emailstr", emailstr);
             String passstr =password.getText().toString();
 
+            String weightstr = weight.getText().toString();
+            String heightstr = height.getText().toString();
+            String lifestylestr = lifestyle.getText().toString();
+
+            currentUser.height = Integer.parseInt(heightstr);
+            currentUser.weight = Integer.parseInt(weightstr);
+            currentUser.liefstyle = lifestylestr;
             String cpassstr =cpassword.getText().toString();
             if(!passstr.equals(cpassstr))
             {

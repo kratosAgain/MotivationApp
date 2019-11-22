@@ -92,7 +92,7 @@
         android:layout_alignStart="@+id/username"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="280dp"
+        android:layout_marginTop="266dp"
         android:text="Enter your Weight" />
 
     <EditText
@@ -105,14 +105,15 @@
         android:inputType="textPersonName"
         android:hint="Weight"
         />
+
     <TextView
         android:id="@+id/textViewheight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/username"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="400dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="338dp"
         android:text="Enter your Height" />
 
     <EditText
@@ -121,10 +122,29 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewheight"
         android:layout_alignStart="@+id/username"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="-3dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Height"
-        />
+        android:inputType="textPersonName" />
+    <TextView
+        android:id="@+id/lifestyleid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/username"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="300dp"
+        android:text="select lifestyle"/>
+
+    <EditText
+        android:id="@+id/Lifestyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/username"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="253dp"
+        android:hint="Lifestyle" />
 
     <TextView
         android:id="@+id/textView13"
@@ -176,5 +196,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:text="Sign Up!" />
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 
 </RelativeLayout>

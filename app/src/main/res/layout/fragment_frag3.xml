@@ -42,7 +42,8 @@
                 android:layout_height="250dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="80dp"
+
 
                 />
 
@@ -52,11 +53,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_below="@+id/nutrients_day_compare_barchart"
-                android:layout_marginTop="100dp" />
+                android:layout_marginTop="40dp" />
+
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/cheat_food"
+                android:text="CHEAT FOOD"
+                android:layout_marginTop="10dp"
+                >
+
+            </Button>
+
 
 
 
         </RelativeLayout>
+
+
+
+
 
         <!--</FrameLayout>-->
     </ScrollView>

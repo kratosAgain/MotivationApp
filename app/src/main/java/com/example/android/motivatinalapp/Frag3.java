@@ -1,7 +1,9 @@
 package com.example.android.motivatinalapp;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -11,6 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -43,7 +49,11 @@ public class Frag3 extends Fragment {
     public GraphView linegraph , bargraph;
     public BarChart nutrientsDayCompareBarchart;
     public BarChart nutrients_week_compare_barchart;
+    public Button cheat_button;
+    public ListView cheatlistview;
     DatabaseHelper db = null;
+    CheatData cheatdata ;
+    ArrayList<UserData> cheatList ;
 
 
     Map<String, Double> nutrientValues = null;
@@ -65,6 +75,8 @@ public class Frag3 extends Fragment {
 //        this.bargraph = (GraphView) view.findViewById(R.id.bar_graph);
         this.nutrientsDayCompareBarchart = view.findViewById(R.id.nutrients_day_compare_barchart);
         this.nutrients_week_compare_barchart = view.findViewById(R.id.nutrients_week_compare_barchart);
+        this.cheat_button = view.findViewById(R.id.cheat_food);
+
 //        this.makegraph();
 //        this.lastAllHoursGraphOfCalories();
 
@@ -83,9 +95,13 @@ public class Frag3 extends Fragment {
 
         this.weeklyGraphOfCalories();
 
+        findTheCheatFood();
+        showCheatFoods();
 
         return view;
     }
+
+
 
 
     public void makegraph(){
@@ -147,7 +163,7 @@ public class Frag3 extends Fragment {
         this.bargraph.addSeries(barData);
     }
 
-    @TargetApi(26)
+
     public void weeklyGraphOfCalories(){
         Cursor cursor = db.searchUserDatabase(currentUser.currentUserName);
         int i = 0;
@@ -195,8 +211,8 @@ public class Frag3 extends Fragment {
 
                 for(String s: this.nutrientValues.keySet()) {
                     nut= db.getNutrientValue(cursor, s);
-//                    if (maxvals.getOrDefault(s,0.0)<nut)
-//                        maxvals.put(s,nut);
+//                    if (maxvmaxvalsals.getOrDefault(s,0.0)<nut)
+//                        .put(s,nut);
 //                    if (minvals.getOrDefault(s,0.0)>nut)
 //                        minvals.put(s,nut);
                     if (s.equals("sodium")) {
@@ -337,5 +353,53 @@ public class Frag3 extends Fragment {
         //making bar chart ends
 
     }
+
+
+    public void findTheCheatFood(){
+        cheatdata = new CheatData(currentUser.currentUserName, this.db);
+        cheatList = cheatdata.getPossibleCheatFood("calories");
+    }
+
+    public void showCheatFoods(){
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.popup_forcheat);
+        dialog.setTitle("Cheat FOODS");
+        TextView message = (TextView) dialog.findViewById(R.id.layout_popup_txtMessage);
+        cheatlistview = dialog.findViewById(R.id.cheat_foodlist_popup);
+
+
+        this.cheat_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(cheatList.size()==0){
+                    message.setText("You cant cheat this week :( :( ");
+                    dialog.show();
+                }else{
+                    showCheatList();
+                    dialog.show();
+                }
+            }
+        });
+    }
+
+    public void showCheatList(){
+
+        CustomListAdapter adapter = new CustomListAdapter(getActivity(), db, cheatList);
+        this.cheatlistview.setAdapter(adapter);
+        this.cheatlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), FootDetails.class);
+                UserData u = cheatList.get(position);
+                intent.putExtra("userdata", u);
+                getActivity().startActivity(intent);
+
+            }
+        });
+
+    }
+
+
+
 
 }

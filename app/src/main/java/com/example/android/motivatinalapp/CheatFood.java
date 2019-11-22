@@ -66,7 +66,7 @@ public class CheatFood extends AppCompatActivity {
     public void addItemsInDropDown(){
         List<String> cheatFoods = new ArrayList<>();
 
-        cheatFoods.add("");
+        cheatFoods.add("Select cheat food, upto 3");
         cheatFoods.add("Pepperoni Pizza");
         cheatFoods.add("HamBurger");
         cheatFoods.add("Chicken Parmesan");
@@ -83,7 +83,7 @@ public class CheatFood extends AppCompatActivity {
     class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            if(parent.getItemAtPosition(pos).toString().length()==0){
+            if(parent.getItemAtPosition(pos).toString().contains("Select")){
                 //do nothing
             }
             else if(foodList.size()>=3){

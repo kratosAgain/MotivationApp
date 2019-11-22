@@ -82,6 +82,8 @@ public class Frag1 extends Fragment {
 
         //cheat food end
 
+
+
         return view;
             }
 
@@ -116,6 +118,7 @@ public class Frag1 extends Fragment {
         });
 
     }
+
 
 
 }

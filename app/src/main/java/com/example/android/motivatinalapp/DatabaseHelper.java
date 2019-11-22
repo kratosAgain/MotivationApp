@@ -148,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String searchdatabase(String str)
     {
-        Log.d("INside the search","inside");
+        Log.d("Inside the search","inside");
         db = this.getReadableDatabase();
         Log.d("After db","connect");
         String query = "select * from "+ this.TABLE_NAME_CONTACTS+" WHERE uname = ?";

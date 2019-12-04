@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -49,6 +55,7 @@ public class Frag3 extends Fragment {
     public GraphView linegraph , bargraph;
     public BarChart nutrientsDayCompareBarchart;
     public BarChart nutrients_week_compare_barchart;
+    public LineChart weeklyCalorieChart;
     public Button cheat_button;
     public ListView cheatlistview;
     DatabaseHelper db = null;
@@ -75,6 +82,7 @@ public class Frag3 extends Fragment {
 //        this.bargraph = (GraphView) view.findViewById(R.id.bar_graph);
         this.nutrientsDayCompareBarchart = view.findViewById(R.id.nutrients_day_compare_barchart);
         this.nutrients_week_compare_barchart = view.findViewById(R.id.nutrients_week_compare_barchart);
+        this.weeklyCalorieChart = view.findViewById(R.id.dailycaloriegraph);
         this.cheat_button = view.findViewById(R.id.cheat_food);
 
 //        this.makegraph();
@@ -94,7 +102,7 @@ public class Frag3 extends Fragment {
         this.makeNutrientsComparisonBarChart();
 
         this.weeklyGraphOfCalories();
-
+        this.dailycalorieview();
         findTheCheatFood();
         showCheatFoods();
 
@@ -163,7 +171,83 @@ public class Frag3 extends Fragment {
         this.bargraph.addSeries(barData);
     }
 
+    public void dailycalorieview() {
+        Cursor cursor = db.searchUserDatabase(currentUser.currentUserName);
+        XAxis xAxis = weeklyCalorieChart.getXAxis();
+        YAxis yAxisRight =weeklyCalorieChart.getAxisRight();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        String[] datesxaxis = new String[7];
+        int i = 0;
+        if (cursor == null) {
+            Log.i("Cursor", "Cursor is Null");
+            return;
+        }
+        List<Entry> entries = new ArrayList<Entry>();
+        HashMap<String,Double> caloriesdaily = new HashMap<>();
+        List<Entry> entriestest = new ArrayList<Entry>();
+        entriestest.add(new Entry(0,4));
+        entriestest.add(new Entry(1,7));
+        entriestest.add(new Entry(2,10));
+        entriestest.add(new Entry(3,7));
+        entriestest.add(new Entry(4,3));
+        entriestest.add(new Entry(5,6));
+        entriestest.add(new Entry(6,9));
+        HashMap<String,Double> caloriesdailytest = new HashMap<>();
+        String[] datesxaxistest = new String[]{"Monday","Tue","Wed","Thrus", "Friday","Sat","Sun"};
 
+        Calendar currenttime = Calendar.getInstance();
+        currenttime.add(Calendar.DATE, -7);
+        Date curtime = currenttime.getTime();
+        String strtime = curtime.toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateObject = sdf.format(curtime);
+        Date todaysdate = Calendar.getInstance().getTime();
+        String todaydate = sdf.format(Calendar.DATE);
+        while (cursor.moveToNext()) {
+            try {
+                Date day = db.getDate(cursor);
+                String presentday = sdf.format(day);
+                Log.i("presentday cursor", presentday);
+                Log.i("todaydate", todaydate);
+                if (day.after(curtime) && day.before(todaysdate)) {
+//                if(presentday!=dateObject)
+//                    continue;
+                    if (presentday == todaydate)
+                        break;
+                    double val = db.getCalorires(cursor);
+                    datesxaxis[i] = presentday;
+                    caloriesdaily.put(presentday,val);
+                    i++;
+                }
+            } catch (Exception e) {
+                Log.e("CURSOR_ERROR", "error in making bar chart from cursor");
+                e.printStackTrace();
+            }
+            cursor.close();
+        }
+        int j=0;
+//        for (Map.Entry<String, Double> entry : caloriesdaily.entrySet()) {
+//            entries.add(new Entry(j,entry.getValue().floatValue()));
+//        }
+        LineDataSet dataSet = new LineDataSet(entriestest, "Customized values");
+        dataSet.setColor(Color.rgb(0, 155, 0));
+        dataSet.setValueTextColor(android.R.color.black);
+        yAxisRight.setEnabled(false);
+        YAxis yAxisLeft = weeklyCalorieChart.getAxisLeft();
+        yAxisLeft.setGranularity(1f);
+        xAxis.setValueFormatter(new ValueFormatter(){
+            public String getAxisLabel(float value, AxisBase axis){
+                return datesxaxistest[(int) value];
+            }
+        } );
+        // Setting Data
+        LineData data = new LineData(dataSet);
+        weeklyCalorieChart.setData(data);
+        weeklyCalorieChart.animateX(2500);
+        //refresh
+        weeklyCalorieChart.invalidate();
+
+    }
     public void weeklyGraphOfCalories(){
         Cursor cursor = db.searchUserDatabase(currentUser.currentUserName);
         int i = 0;

@@ -61,12 +61,12 @@ public class Frag1 extends Fragment {
 
         String name = currentUser.currentUserName;
         double bmi = currentUser.currenUserBMI;
-//        TextView username=(TextView) view.findViewById(R.id.pro);
-//        username.setText(name);
+        TextView username=(TextView) view.findViewById(R.id.profilename);
+        username.setText(name);
         TextView bmitext = (TextView)view.findViewById(R.id.textbmi);
         bmitext.setText(Double.toString(bmi));
-//        TextView caloriesperday = (TextView)view.findViewById(R.id.);
-//        caloriesperday.setText(Integer.toString(caloriesPerDay));
+        TextView caloriesperday = (TextView)view.findViewById(R.id.calorieperday);
+        caloriesperday.setText(""+Double.toString(caloriesPerDay));
         TextView carbsperday = (TextView)view.findViewById(R.id.carbsperday);
         carbsperday.setText(Double.toString(carbsPerDay));
         TextView fatperday = (TextView)view.findViewById(R.id.fat);
@@ -77,7 +77,6 @@ public class Frag1 extends Fragment {
         //cheat food start
         userDataMain = new UserData();
         db =new DatabaseHelper(getActivity());
-
         cheatlistview = view.findViewById(R.id.cheat_foodlist);
         cheatlist = new ArrayList<>();
         this.showCheatList();

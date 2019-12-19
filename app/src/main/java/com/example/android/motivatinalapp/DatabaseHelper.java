@@ -316,4 +316,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return value;
     }
+
+    public double getCalorires(Cursor c){
+        double value = 0;
+
+        try{
+            value = Double.parseDouble(c.getString(c.getColumnIndex("calories")));
+        }catch(Exception e){
+            Log.e("Nutrient Error","Error in getting "+" value");
+            e.printStackTrace();
+        }
+
+        return value;
+
+    }
 }
